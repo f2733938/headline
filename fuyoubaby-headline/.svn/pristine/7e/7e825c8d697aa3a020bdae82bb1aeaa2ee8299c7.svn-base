@@ -1,0 +1,56 @@
+$(function() {
+
+	//登陆
+	$("#login").click(function(){
+
+		var phone = $("#phone").val();
+		var password = $("#password").val();
+		if(checkPhone(phone) === false){
+            $.alert("手机号码有误，请重填");
+
+			return;
+		}
+/*		var param = {
+			url: '/user/login/password',
+			data: {
+				'phone' : phone,
+				'userFlag' : "U",  //作为普通用户登录
+				'password' : password
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'loginHander',
+		}
+		sanmi.query(param);*/
+		//window.location.href="/user/login/password"
+        $.ajax({
+            type : "POST", //提交方式
+            url : "/user/login/password",//路径
+            data : {
+                'phone' : phone,
+                'userFlag' : "U",  //作为普通用户登录
+                'password' : password
+            },//数据，这里使用的是Json格式进行传输
+            success : function(result) {//返回数据根据结果进行相应的处理
+                console.log(result);
+                if(result.status == "0") {
+                    $.alert("密码应为6-20位");
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                sanmi.setCash("userInfo",result.info);
+                sanmi.toPage("/view/index.html?recommend=true&userId="+result.info.id);
+            }
+
+        });
+    })
+
+});
+//验证手机号
+function checkPhone(phone){ 
+    if(!(/^1[34578]\d{9}$/.test(phone))){ 
+        return false; 
+    } 
+}
+
+

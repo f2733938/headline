@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/css.css" />
+        <link rel="stylesheet" href="/resources/css/swiper-4.1.6.min.css" />
+        <script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/swiper-4.1.6.min.js" ></script>
+			<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+			<script type="text/javascript" src="/resources/listjs/detail_video.js"></script>
+	   <script type="text/javascript" src="/resources/js/template.js"></script>
+	</head>
+	<body>
+		<div class="page">
+			<div class="content" style="background:#fff">
+				<div class="detail-video" >
+				<div id="detail_video"></div>
+				<script id="stickfloorList" type="text/html">
+					<video width="100%" height="240" controls>
+					    <source src="{{videoInfo.url}}" type="video/mp4">
+					</video>
+					</script>
+				</div>
+				<h5 class="detail-title" id="detail_title"></h5>
+			    <small class="headings" id="headings"></small>
+			    <div>
+			    	<article class="detail-top clearfix">
+			    		<div class="pull-left">
+			    			<span style="background-image: url(images/list1.png);" class="detail-head" onclick="publisherInfo()"></span>
+			    			<div>
+			    				<p id="ownName"></p>
+			    				<time id="haiCreateTime">02-14 12:00</time>
+			    			</div>
+			    		</div>
+			    		<div class="pull-right">
+							<img src="/resources/images/yiguanzhu.png" style="width:1.2rem;display: inline-block;vertical-align: middle;" id="guanzhu">
+							<i style="font-size: 0.7rem;" id="focusCount">12.5万</i>
+							<input type="hidden" id="haiId" />
+							<input type="hidden" id="publisherId" />
+							<input type="hidden" id="userId" />
+			    		</div>
+			    	</article>
+			    	
+			    	<div class="comment-sec" >
+			    		<header>用户评论(<i id="commentCount">500</i>)</header> 
+			    		<section>
+						<div id="comment_sec"></div>
+						<script id="typefloorList" type="text/html">
+						{{each info as ifo}}
+			    			<article class="comment-item">
+			    				<span style="background-image:url({{ifo.userHeadImage}});" class="item-head"></span>
+			    			    <div>
+			    			    	<p class="item-p0 clearfix">
+									<!--<a href="javascript:;" hidden="hidden" id="hacArticleId">{{ifo.hacArticleId}}</a>-->
+			    			    	   <span style="color:#31567f;">{{ifo.userName}}</span>
+									   {{if ifo.hasLike == "Y"}}
+			    			    	   <span class="clickPraise"><img src="/resources/images/yizan.png" id="{{ifo.hacId}}"><i style="color:#f84a4b">{{ifo.hacLikeCount}}</i></span>
+									   {{else}}
+									    <span class="clickPraise"><img src="/resources/images/zan.png" id="{{ifo.hacId}}"><i style="color:#90a2af">{{ifo.hacLikeCount}}</i></span>
+										{{/if}}
+			    			    	</p>
+			    			    	<p class="item-p1">{{ifo.hacContent}}</p>
+			    			    	<time>{{ifo.hacCreateTime}}</time>
+									
+			    			    </div>
+			    			</article>
+							{{/each}}
+							
+			    		</section>
+			    	</div>
+			    </div>
+			    <footer class="detail-footer">
+			    	<div class="pull-left">
+			    		<img src="/resources/images/pinglun-b.png" id="pinglun">
+			    		<input type="text" placeholder="写评论..." id="comment">
+			    	</div>
+			        <span class="pull-right">
+					
+			        	<img src="/resources/images/shoucang1.png" id="clickCollect">
+			        </span>
+			    </footer>
+			</div>
+			</script>
+		</div>
+		<script>
+		
+			$(function(){
+			//关注逻辑实现
+				var articleId = $("#haiId").val();
+				var publisherId = $("#publisherId").val();
+				var userId = $("#userId").val();
+                $("#guanzhu").click(function() {
+                    if (userId == null || userId == "" || userId == "null"){
+                        alert("暂未登陆,请登录");
+                        window.location.href="/view/login.html";
+                        return false;
+                    }
+                    if($(this).attr("src") == "/resources/images/yiguanzhu.png") {
+                        $(this).attr("src","/resources/images/guanzhu.png");
+                        var param = {
+                            url: '/headline/article/publisher/follow/cancel',
+                            data: {
+                                'publisherId': publisherId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'followHander',
+                        }
+                        sanmi.query(param);
+                    } else {
+                        $(this).attr("src","/resources/images/yiguanzhu.png");
+                        var param = {
+                            url: '/headline/article/publisher/follow/create',
+                            data: {
+                                'publisherId': publisherId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'followHander',
+                        }
+                        sanmi.query(param);
+                    }
+                })
+				//评论逻辑实现
+				$("#pinglun").click(function(){
+                    if (userId == null || userId == "" || userId == "null"){
+                        alert("暂未登陆,请登录");
+                        window.location.href="/view/login.html";
+                        return false;
+                    }
+				var comment =  $("#comment").val();
+				var param = {
+			url: '/headline/article/comment/create',
+			data: {
+				'content': comment,
+				'userId': userId,
+				'articleId': articleId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'likeHander',
+					}
+			sanmi.query(param);
+				})
+				//点赞逻辑实现
+				$.each($(".comment-item"), function(i,e) {
+					$(e).find(".clickPraise").click(function(){
+						if($(this).find("img").attr("src")=="/resources/images/zan.png"){
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","/resources/images/yizan.png");
+							$(this).find("i").css("color","#f84a4b");
+							$(this).find("i").html(num+1);
+						}/**else{
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/zan.png");
+							$(this).find("i").css("color","#90a2af");
+							$(this).find("i").html(num-1);
+						}*/
+						var commentId = $(this).find("img").attr("id");
+                        if (userId == null || userId == "" || userId == "null"){
+                            alert("暂未登陆,请登录");
+                            window.location.href="/view/login.html";
+                            return false;
+                        }
+						var param = {
+			url: '/headline/article/comment/like',
+			data: {
+				'commentId': commentId,
+				'userId': userId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'collectionHander',
+					}
+			sanmi.query(param);
+					})
+				});
+				/*收藏*/
+				$("#clickCollect").click(function(){
+                    if (userId == null || userId == "" || userId == "null"){
+                        alert("暂未登陆,请登录");
+                        window.location.href="/view/login.html";
+                        return false;
+                    }
+					if($(this).attr("src")=="/resources/images/shoucang1.png"){
+						$(this).attr("src","/resources/images/yishoucang.png");
+						var param = {
+			url: '/headline/article/user/collection/create',
+			data: {
+				'articleId': articleId,
+				'userId': userId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'collectionHander',
+		}
+			sanmi.query(param);
+					}else{
+						$(this).attr("src","/resources/images/shoucang1.png");
+						var param = {
+			url: '/headline/article/user/collection/cancel',
+			data: {
+				'articleId': articleId,
+				'userId': userId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'collectionHander',
+		}
+			sanmi.query(param);
+					}
+				})
+			})
+			//处理返回值
+function followHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+		alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+	}
+				//处理返回值
+function likeHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+		alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+	}
+	function collectionHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+		alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+	}
+            function publisherInfo(){
+                var publisherId = $("#publisherId").val();
+                var userId = $("#userId").val();
+                window.location.href="fabuzhe.html?userId="+userId+"&publisherId="+publisherId;
+            }
+		</script>
+	</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="css/sm.min.css" />
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/css.css" />
+        <script type="text/javascript" src="js/jquery1.11.3.min.js" ></script>
+        <script type="text/javascript" src="js/zepto.min.js" ></script>
+        <script type="text/javascript" src="js/sm.min.js" ></script>
+	</head>
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a class="icon icon-left pull-left"></a>
+			    <h1 class="title">评论管理</h1>
+			</header>
+			<div class="content" style="background: #fff;">
+				<div class="comment-sec">
+		    		<section>
+		    			<article class="comment-item">
+		    				<span style="background-image:url(images/aaa.jpg);" class="item-head"></span>
+		    			    <div>
+		    			    	<p class="item-p0 clearfix">
+		    			    	   <span style="color:#31567f;">无处可躲</span>
+		    			    	   <span class="clickPraise"><img src="images/zan.png"><i style="color:#90a2af">256</i></span>
+		    			    	</p>
+		    			    	<p class="item-p1">如果你无法简洁的表达你的想法，那只说明你还不够了解它。</p>
+		    			    	<p class="item-p2"><time>2018-01-21 12:00</time><span class="clickDel">删除</span></p>
+		    			    </div>
+		    			</article>
+		    			<article class="comment-item">
+		    				<span style="background-image:url(images/aaa.jpg);" class="item-head"></span>
+		    			    <div>
+		    			    	<p class="item-p0 clearfix">
+		    			    	   <span style="color:#31567f;">无处可躲</span>
+		    			    	   <span class="clickPraise"><img src="images/zan.png"><i style="color:#90a2af">256</i></span>
+		    			    	</p>
+		    			    	<p class="item-p1">如果你无法简洁的表达你的想法，那只说明你还不够了解它。</p>
+		    			    	<p class="item-p2"><time>2018-01-21 12:00</time><span class="clickDel">删除</span></p>
+		    			    </div>
+		    			</article>
+		    			<article class="comment-item">
+		    				<span style="background-image:url(images/aaa.jpg);" class="item-head"></span>
+		    			    <div>
+		    			    	<p class="item-p0 clearfix">
+		    			    	   <span style="color:#31567f;">无处可躲</span>
+		    			    	   <span class="clickPraise"><img src="images/zan.png"><i style="color:#90a2af">256</i></span>
+		    			    	</p>
+		    			    	<p class="item-p1">如果你无法简洁的表达你的想法，那只说明你还不够了解它。</p>
+		    			    	<p class="item-p2"><time>2018-01-21 12:00</time><span class="clickDel">删除</span></p>
+		    			    </div>
+		    			</article>
+		    		</section>
+		    	</div>
+		    	<footer class="detail-footer">
+			    	<div class="pull-left" style="width: 100%;">
+			    		<img src="images/pinglun-b.png">
+			    		<input type="text" placeholder="写评论...">
+			    	</div>
+			      
+			    </footer>
+			</div>
+		</div>
+		<script>
+			$(function(){
+				$.each($(".comment-item"), function(i,e) {
+					$(e).find(".clickPraise").click(function(){
+						if($(this).find("img").attr("src")=="images/zan.png"){
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/yizan.png");
+							$(this).find("i").css("color","#f84a4b");
+							$(this).find("i").html(num+1);
+						}else{
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/zan.png");
+							$(this).find("i").css("color","#90a2af");
+							$(this).find("i").html(num-1);
+						}
+					})
+					$(e).find(".clickDel").click(function(){
+						$(e).remove();
+					})
+				});
+			})
+		</script>
+	</body>
+</html>

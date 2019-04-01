@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<link rel="stylesheet" href="/resources/css/photoswipe.css" />
+        <link rel="stylesheet" href="/resources/css/default-skin/default-skin.css" />
+        <script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+		<script type="text/javascript" src="/resources/js/photoswipe.js"></script>
+        <script type="text/javascript" src="/resources/js/photoswipe-ui-default.js"></script>
+        <script type="text/javascript" src="/resources/js/image-auto.js"></script>
+                         <script type="text/javascript" src="/resources/base/httpClient.js"></script>
+          <script type="text/javascript" src="/resources/js/template.js"></script>
+         <script type="text/javascript" src="/resources/listjs/search_result.js"></script>
+        <script>
+        	$(function(){
+        		$.each($(".l-first-tus figure"),
+		        function(i, e) {
+		          $(e).height($(e).width() *0.66);
+		        });
+        		 $(".new-item5 .l-first-tus figure").height($(".new-item5 .l-first-tus figure").width()*0.58);
+        	})
+        </script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="fixed-idx">
+				<header class="bar bar-nav head-bg">
+					<a href="javascript:;" class="black_icon" onclick="back()"><img src="/resources/images/black-icon.png"></a>
+				    <h1 class="title">我的关注</h1>
+				</header>
+			</div>
+			<div style="margin-top:2.2rem" class="content_major">
+				<div class="line-con" style="border-top:1px solid #f0f0f0" id="content1">
+					<script id="floorList" type="text/html">
+						{{each info as ifo}}  {{if ifo.coverPositionFlag == "THREE_LIST"}} {{if ifo.haiArticleType == "IMAGE"}}
+						<article class="new-item4">
+							<a href="/view/detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+							</a>
+							<div class="more-tus">
+								<div class="l-first-tus my-gallery">
+									{{if ifo.coverImageList.length == 0}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									{{else if  ifo.coverImageList.length == 1}}
+									{{each ifo.coverImageList as image}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="{{image.url}}" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									{{/each}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									{{else if  ifo.coverImageList.length == 2}}
+									{{each ifo.coverImageList as image}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="{{image.url}}" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									{{/each}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									{{else}}
+									{{each ifo.coverImageList as image}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+												<img src="{{image.url}}" onload="resize_img(this)">
+											</a>
+										</div>
+									</figure>
+									{{/each}}
+									{{/if}}
+								</div>
+								<span>+{{ifo.normalImageCount}}</span>
+							</div>
+
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else}}
+						<article class="new-item">
+							<a href="/view/detail1.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+								<div class="l-first-tus">
+									{{if ifo.coverImageList.length == 0}}
+									<figure style="background-image: url(/resources/images/toutiao_mrt1.png);"></figure>
+									<figure style="background-image: url(/resources/images/toutiao_mrt1.png);"></figure>
+									<figure style="background-image: url(/resources/images/toutiao_mrt1.png);"></figure>
+									{{else if ifo.coverImageList.length == 1}}
+									{{each ifo.coverImageList as image}}
+									<figure style="background-image: url({{image.url}});"></figure>
+									{{/each}}
+									<figure style="background-image: url(/resources/images/toutiao_mrt1.png);"></figure>
+									<figure style="background-image: url(/resources/images/toutiao_mrt1.png);"></figure>
+									{{else if ifo.coverImageList.length == 2}}
+									{{each ifo.coverImageList as image}}
+									<figure style="background-image: url({{image.url}});"></figure>
+									{{/each}}
+									<figure style="background-image: url(/resources/images/toutiao_mrt1.png);"></figure>
+									{{else}}
+									{{each ifo.coverImageList as image}}
+									<figure style="background-image: url({{image.url}});"></figure>
+									{{/each}}
+									{{/if}}
+								</div>
+							</a>
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{/if}} {{/if}}
+						<!--   小图靠右-->
+						{{if ifo.coverPositionFlag == "SMALL_RIGHT"}} {{if ifo.haiArticleType == "VIDEO"}}
+						<article class="new-item2">
+							<a href="/view/detail2.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									{{if ifo.coverImageList.length == 0}}
+									<div class="item-s-cover">
+
+										<figure style="background-image: url(/resources/images/toutiao_mrt1.png);" class="l-first-tus"></figure>
+
+										<span class="video-len">{{ifo.videoLengthStr}}</span>
+									</div>
+									{{else }}
+									<div class="item-s-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+										<span class="video-len">{{ifo.videoLengthStr}}</span></div>
+									{{/if}}
+								</div>
+							</a>
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else if ifo.haiArticleType == "RICH_TEXT"}}
+						<article class="new-item2">
+							<a href="/view/detail1.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-s-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+									</div>
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else }}
+						<article class="new-item2">
+							<a href="/view/detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-s-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+									</div>
+								</div>
+							</a>
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+							</p>
+						</article>
+						{{/if}} {{/if}}
+						<!--   大图居中-->  <!-- 视频类-->
+						{{if ifo.coverPositionFlag == "BIG_CENTER"}} {{if ifo.haiArticleType == "VIDEO"}}
+						<article class="new-item3">
+							<a href="/view/detail2.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<!--   大图居中  可能为视频和图片-->
+									<div class="item-video">
+										{{if ifo.coverImageList.length == 0}}
+										<figure style="background-image: url(/resources/images/toutiao_mrt1.png);" class="l-first-tus"></figure>
+										{{else}}
+										{{each ifo.coverImageList as image}}
+
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+										{{/if}}
+										<img src="/resources/images/bofang.png" class="bf-btn">
+										<span class="video-len">{{ifo.videoLengthStr}}</span>
+									</div>
+
+								</div>
+								</div>
+							</a>
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						<!-- 大图居中  图片类-->
+						{{else if ifo.haiArticleType == "IMAGE"}}
+						<article class="new-item5">
+							<a href="/view/detail.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+
+								<div class="more-tus">
+									<div class="l-first-tus my-gallery">
+										{{if ifo.coverImageList.length == 0}}
+										<figure>
+
+											<div class="img-dv">
+
+												<img src="/resources/images/toutiao_mrt1.png" onload="resize_img(this)" />
+												<!--	</a>-->
+											</div>
+
+										</figure>
+										{{else}}
+										{{each ifo.coverImageList as image}}
+										<figure>
+
+											<div class="img-dv">
+
+												<img src="{{image.url}}" onload="resize_img(this)" />
+												<!--	</a>-->
+											</div>
+
+										</figure>
+										{{/each}}
+										{{/if}}
+									</div>
+									<!--   <span>+10</span> -->
+								</div>
+							</a>
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else}}
+						<article class="new-item5">
+							<a href="/view/detail1.html?articleId={{ifo.haiId}}&userId={{userId}}" target="_blank">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+
+								<div class="more-tus">
+									<div class="l-first-tus my-gallery">
+										{{each ifo.coverImageList as image}}
+										<figure>
+
+											<div class="img-dv">
+
+												<img src="{{image.url}}" onload="resize_img(this)" />
+												<!--	</a>-->
+											</div>
+										</figure>
+										{{/each}}
+									</div>
+									<!--   <span>+10</span> -->
+								</div>
+							</a>
+							<p class="fo">
+								{{if ifo.ownOrgName !=""}}
+								<span>{{ifo.ownName}}-{{ifo.ownOrgName}}</span>
+								{{else}}
+								<span>{{ifo.ownName}}</span>
+								{{/if}}
+								<span name="count">{{ifo.formatReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{/if}} {{/if}} {{/each}}
+
+					</script>
+         </div>
+		</div>
+		</div>
+		<script>
+            var page = 2;
+            window.onload = function() {
+                $(window).scroll(function () {
+                    //$(window).scrollTop()这个方法是当前滚动条滚动的距离
+                    //$(window).height()获取当前窗体的高度
+                    //$(document).height()获取当前文档的高度
+                    var bot = 50; //bot是底部距离的高度
+
+                    if ((bot + $(window).scrollTop()) >= ($(document).height() - $(window).height())) {
+                        //当底部基本距离+滚动的高度〉=文档的高度-窗体的高度时；
+                        //我们需要去异步加载数据了
+                        //debugger;
+                        var myFollow = sanmi.queryParam("myFollow");
+                        var userId = sanmi.queryParam("userId");
+                        var param = {
+                            url: '/headline/article/info/list',
+                            data: {
+                                'myFollow':myFollow,
+                                'userId':userId,
+                                'page':page,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'detailHander',
+                        }
+                        sanmi.query(param);
+                        // $.getJSON("url", { page: "2" }, function (str) { alert(str); });
+                    }
+
+                });
+            };
+									function back(){ 
+					var userId = sanmi.queryParam("myFollow"); 
+					sanmi.toPage("person-center.html?userId="+userId); 
+					}
+            function detailHander(json) {
+                var status = json.status;
+                if(status == "0") {
+                    alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                //  console.info(json);
+                var userId = sanmi.queryParam("userId");
+                json.userId =userId;
+                var oldhtml =  document.getElementById('content1').innerHTML;
+                //console.info("原网页内容"+oldhtml);
+                var html = template('floorList', json);
+                document.getElementById('content1').innerHTML = oldhtml+html ;
+                //console.info("现网页内容"+oldhtml+html)
+                page++;
+            }
+  </script>
+	</body>
+</html>

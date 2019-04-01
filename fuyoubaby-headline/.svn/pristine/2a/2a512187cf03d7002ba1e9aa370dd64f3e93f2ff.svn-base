@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<link rel="stylesheet" href="/resources/css/weui.min.css"/>
+		<link rel="stylesheet" href="/resources/css/jquery-weui.min.css"/>
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+		<script type="text/javascript" src="/resources/js/jquery-weui.min.js"></script>
+		<script>jQuery.noConflict()</script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+		<script type="text/javascript" src="/resources/listjs/person_infol.js"></script>
+		<script type="text/javascript" src="/resources/js/dropzone.js"></script>
+		<style>
+			input[type=date] {
+				background-color:transparent;
+
+				FILTER: alpha(opacity=0); /*androd*/
+				appearance:none;  /*下拉框去掉右侧图标*/
+				-moz-appearance:none;
+				-webkit-appearance:none;
+			}
+			.pull-right{
+				position: relative;}
+			#birth-date{width:6rem;position: absolute;right:-32px;top:0px}
+			.per-list .per-dl .pull-right:after{content: ""}
+			input[type="date"]::-webkit-inner-spin-button{display: none}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a class="icon icon-left pull-left" href="javascript:;" onclick="back()"></a>
+				<h1 class="title">个人资料</h1>
+			</header>
+			<div class="content">
+				<div class="per-list">
+					<article class="w_bg per-head">
+
+						<a href="javascript:;" class="create-actions clearfix ">
+							<span class="pull-left">头像</span>
+							<div class="pull-right">
+								<span style="background-image:url(/resources/images/tx_mr4.png)" id="head"></span>
+
+								<input type="file" id="dropz" hidden="hidden" />
+							</div>
+						</a>
+
+					</article>
+					<article class="w_bg promot-code clearfix per-dl">
+						<a href="javascript:;" class="clearfix" onclick="changeName()">
+							<span class="pull-left">昵称</span>
+							<div class="pull-right">
+								<span id="nickName">李淑芬</span>
+							</div>
+						</a>
+					</article>
+					<article class="w_bg clearfix per-dl sex-selection">
+						<a href="javascript:;" class="clearfix">
+							<span class="pull-left">性别</span>
+							<div class="pull-right">
+								<span id="sex">女</span>
+							</div>
+						</a>
+					</article>
+					<article class="w_bg clearfix per-dl birth-date" style="overflow-x: hidden;">
+						<a href="javascript:;" class="clearfix">
+							<span class="pull-left">生日</span>
+							<div class="pull-right">
+								<span><input type="date" id="birth-date" align="right" value=""></span>
+							</div>
+						</a>
+					</article>
+					<article class="w_bg clearfix per-dl">
+						<a href="javascript:;" class="clearfix">
+							<span class="pull-left">绑定手机</span>
+							<div class="pull-right">
+								<span id="telephone">15269159206</span>
+							</div>
+						</a>
+					</article>
+				</div>
+				<!--性别-->
+				<div class="sex-box w_bg">
+					<p>选择性别</p>
+					<article class="clearfix">
+						<span><img src="/resources/images/weixuanzhong.png" id="man">男</span>
+						<span><img src="/resources/images/xuanzhong.png" id="woman">女</span>
+					</article>
+				</div>
+				<!--遮罩层-->
+				<div class="bound"></div>
+			</div>
+
+		</div>
+		<script>
+			/*性别*/
+			$(".sex-box article span").click(function() {
+				$(".sex-box article span").find("img").attr('src', "/resources/images/weixuanzhong.png");
+				if($(this).find("img").attr("src") == "/resources/images/weixuanzhong.png") {
+					$(this).find("img").attr("src", "/resources/images/xuanzhong.png");
+				} else {
+					$(this).find("img").attr("src", "/resources/images/weixuanzhong.png");
+				}
+			})
+			$(".sex-selection").click(function() {
+				$(".bound,.sex-box").show()
+			})
+			$(".bound").click(function() {
+				$(this).hide();
+				$(".sex-box").hide();
+                var userId = sanmi.queryParam("userId");
+				var src = $("#man").attr("src");
+				var sex = 0; //默认为女
+                $("#sex").html("女");
+				if (src == "/resources/images/xuanzhong.png"){
+						sex = 1;
+                    $("#sex").html("男");
+				}
+                var param = {
+                    url: '/user/info/change',
+                    data: {
+                        'userid': userId,
+                        "sex":sex,
+                    },
+                    method: 'post',
+                    dataType: 'json',
+                    callback: 'applyStatusHander',
+                }
+                sanmi.query(param);
+			})
+			/*生日*/
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+            $("#birth-date").val(today);
+            var now_date=$("#birth-date").val();
+            var date1=new Date(now_date.replace(/\-/g, "\/"));
+
+            $("#birth-date").change(function() {
+                var date2=new Date($("#birth-date").val().replace(/\-/g, "\/"));
+                if(date2>date1){
+					$.alert("出生日期不能大于当前日期");
+                    $("#birth-date").val(today);
+				}
+                var userId = sanmi.queryParam("userId");
+				var birthday = $("#birth-date").val();
+				if (birthday != null ){
+                    var param = {
+                        url: '/user/info/change',
+                        data: {
+                            'userid': userId,
+							"birthday":birthday
+                        },
+                        method: 'post',
+                        dataType: 'json',
+                        callback: 'applyStatusHander',
+                    }
+                    sanmi.query(param);
+				}
+			})
+			function  applyStatusHander(json){
+                if(status == "0") {
+                    alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+			}
+			function  changeName() {
+                var userId = sanmi.queryParam("userId");
+                var nickName = $("#nickName").html();
+				window.location.href="/view/person/person-nicheng.html?userId="+userId+"&nickName="+encodeURI(encodeURI(nickName));
+            }
+		</script>
+	</body>
+
+</html>

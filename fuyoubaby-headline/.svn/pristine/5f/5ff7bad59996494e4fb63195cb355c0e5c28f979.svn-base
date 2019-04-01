@@ -1,0 +1,87 @@
+package com.sanmi.microservice.headline.configuration;
+
+import com.sanmi.microservice.headline.common.interceptors.WeiXinAutoLoginInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 妇幼头条web相关配置
+ *
+ * @author：于起宇 <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018/3/27
+ * Time：上午9:32
+ * 简书：http://www.jianshu.com/u/092df3f77bca
+ * ================================
+ */
+@Configuration
+public class HeadLineWebConfiguration implements WebMvcConfigurer {
+
+    /**
+     * 允许排除过滤器的请求地址
+     */
+    static final List URL_ALLOWS = new ArrayList() {
+        {
+            add("/user/login/password");
+            add("/user/login");
+            add("/user/register/platform");
+            add("/error");
+            add("/view/login.html");
+            add("/view/register.html");
+            add("/view/bangding.html");
+            add("/view/forget-paswd.html");
+            add("/view/user_agreement.html");
+            add("/view/yunying-rule.html");
+            //排除详情页面
+            add("/view/detail.html");
+            add("/view/detail1.html");
+            add("/view/detail2.html");
+            //排除绑定方法
+            add("/user/login/bind");
+            add("/user/login/getSession");
+            add("/user/login/getShareInfo");
+            //排除发送短信
+            add(" /code/sms/send/temp");
+
+            // 排除静态资源
+            add("/resources/**");
+        }
+    };
+    /**
+     * 微信自动登录拦截器
+     */
+    @Autowired
+    private WeiXinAutoLoginInterceptor weiXinAutoLoginInterceptor;
+
+    /**
+     * 添加拦截器
+     *
+     * @param registry 拦截器注册
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(weiXinAutoLoginInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(URL_ALLOWS);
+    }
+
+    /**
+     * 配置静态文件不走拦截器
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 配置静态资源访问
+        registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/static/");
+        // 配置html页面直接访问
+        registry.addResourceHandler("/view/**").addResourceLocations("classpath:/templates/");
+    }
+}

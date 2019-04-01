@@ -1,0 +1,41 @@
+package com.sanmi.microservice.headline.common;
+
+/**
+ * @author：许志国 <br/>
+ * ===============================
+ * Date：2018/3/27
+ * Time：16:41
+ * ================================
+ */
+public class Constants {
+    /** 接口地址 */
+    //public static final String JIEKOUADDRV2="http://api.fangxinyuesao.com/v2/";
+    public static final String interfaceAddress="http://develop.fangxinyuesao.com/api/v2/";
+
+    /** 接口返回status标识 */
+    public static final String STATUS_SUCCESS = "1";//成功
+
+    /** 微信用户session标识 */
+    public static final String WXSESSIONKEY = "smwx2017";
+
+    /** 微信账户平台标识 */
+    public static final String PLATFORM_NANNY = "smwx2017";
+
+    /** 微信应用Id*/
+    public static final String APPID = "smwx2017";
+
+    /** 微信应用密钥*/
+    public static final String APPDSECRET = "smwx2017";
+
+    /**获取网页授权access_token*/
+    public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+
+    /**刷新获取网页授权access_token*/
+    public static final String REFRESH_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
+
+    /**获取用户基本信息*/
+    public static final String WX_USERINF_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+
+    /**状态码*/
+    public static final String STATE_ZC = "0";
+}

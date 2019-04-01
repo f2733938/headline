@@ -1,0 +1,63 @@
+package com.sanmi.microservice.headline.configuration.properties;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * 微信配置基本信息实体类
+ * ===============================
+ * Created with Eclipse.
+ * User：于起宇
+ * Date：2017/9/26
+ * Time：15:07
+ * 简书：http://www.jianshu.com/u/092df3f77bca
+ * ================================
+ *
+ * @author yuqiyu
+ */
+@Configuration
+@ConfigurationProperties(prefix = "weixin")
+@Data
+public class WeiXinProperties {
+    /**
+     * 微信开发配置appId
+     */
+    private String appId;
+
+    /**
+     * 微信开发配置appSecret
+     */
+    private String appSecret;
+
+    /**
+     * 微信开发配置mchId（商户号）
+     */
+    private String mchId;
+
+    /**
+     * 微信开发配置mchKey（商户秘钥）
+     */
+    private String mchKey;
+
+    /**
+     * 获取access_token请求地址
+     */
+    private String getAccessTokenUrl;
+    /**
+     * 获取用户基本信息请求路径
+     */
+    private String getUserInfoUrl;
+    /**
+     * 通过oath2获取access_token路径
+     */
+    private String getAccessTokenOAuthUrl;
+    /**
+     * 进入授权页面获取code
+     */
+    private String getCodeUrl;
+    /**
+     * 获取Ticket
+     */
+    private String getTicketUrl;
+}

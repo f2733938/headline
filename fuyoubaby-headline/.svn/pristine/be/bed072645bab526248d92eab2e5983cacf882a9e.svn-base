@@ -1,0 +1,23 @@
+package com.sanmi.microservice.headline.login.params;
+
+import lombok.Data;
+
+/**
+ * 获取用户信息参数实体
+ *
+ * @author：于起宇 <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018/3/27
+ * Time：上午9:43
+ * 简书：http://www.jianshu.com/u/092df3f77bca
+ * ================================
+ */
+@Data
+public class UserInfoParam {
+    /**
+     * 用户Id请求参数
+     */
+    private String userid;
+
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="icon icon-left pull-left" onclick="window.history.back();"></a>
+				<h1 class="title">搜索</h1>
+			</header>
+			<div class="content" style="background:#fff">
+				<article class="search-b">
+					<img src="/resources/images/sousuo.png" onclick="search()">
+					<form action='' onsubmit="return false;">
+						<input type="search" placeholder="输入想搜索内容的关键词" id="serachTxt">
+					</form>
+					<a href="javascript:;" class="searchCancel">取消</a>
+				</article>
+				<p class="search-title">历史记录<span><img src="/resources/images/del.png"></span></p>
+				<ul class="search-list">
+					<li>
+						<a href="javascript:;">山东省妇幼保健院</a>
+					</li>
+					<li>
+						<a href="javascript:;">宝宝摔倒应该怎么办</a>
+					</li>
+					<li>
+						<a href="javascript:;">妇幼宝贝合作</a>
+					</li>
+					<li>
+						<a href="javascript:;">泰安市妇幼保健院</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*清楚搜索历史记录*/
+				$(".search-title span").click(function() {
+					$(".search-list").find("li").remove();
+					$(".search-title").hide();
+				})
+				/*搜索*/
+				$("#serachTxt").bind("search", function() {
+					window.location.href = "search-result.html";
+				})
+				/*搜索取消*/
+				$(".searchCancel").click(function() {
+					$("#serachTxt").val("");
+				})
+
+			})
+
+			function search() {
+				//var userId = sanmi.queryParam("userId");
+				//var cityCode = sanmi.queryParam("cityCode");
+				var keyword = $("#serachTxt").val()
+				window.location.href = "search-result.html?keyword=" + encodeURI(encodeURI(keyword));
+			}
+		</script>
+	</body>
+
+</html>

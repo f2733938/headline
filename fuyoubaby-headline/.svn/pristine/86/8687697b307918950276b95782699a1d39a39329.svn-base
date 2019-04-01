@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/css.css" />
+        <link rel="stylesheet" href="/resources/css/sharecss/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/publisher.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+		<style>
+			.pub-plate div .fbz-nogu{background: #CCCCCC;color:#fff;}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div class="pub-plate">
+					<span style="background-image:url(/resources/images/list2.png);" class="pub-head"></span>
+					<div>
+						<p id="ownName">妇幼宝贝平台</p>
+						<a href="javascript:;" class="fbz-gu">关注</a>
+
+					</div>
+				</div>
+				<article class="sp-list clearfix">
+					<span><i id="fansCount">5427</i><i>粉丝</i></span>
+					<span><i id="newsCount">259</i><i>资讯</i></span>
+					<span><i id="readCount" >13.5万</i><i>阅读</i></span>
+				</article>
+				<div class="publisher">
+					<header>TA发布的</header>
+					<div class="publish-d">
+						<div class="line-con" id="content2"></div>
+						<script id="floorList" type="text/html">
+							{{each info as ifo}} {{if ifo.haiIsTop != "Y"}} {{if ifo.coverPositionFlag == "THREE_LIST"}} {{if ifo.haiArticleType == "IMAGE"}}
+							<article class="new-item4">
+								<a href="/view/detail.html?articleId={{ifo.haiId}}">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+								</a>
+								<div class="more-tus">
+									<div class="l-first-tus my-gallery">
+										{{each ifo.coverImageList as image}}
+										<figure>
+											<div class="img-dv">
+												<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}">
+
+													<img src="{{image.url}}" onload="resize_img(this)">
+												</a>
+											</div>
+											<!--  <figcaption itemprop="caption description">{{image.ctiImageUrl}}</figcaption>-->
+										</figure>
+										{{/each}}
+									</div>
+									<span>+{{ifo.coverImageList.length}}</span>
+								</div>
+
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+
+								</p>
+							</article>
+							{{else}}
+							<article class="new-item">
+								<a href="/view/detail1.html?articleId={{ifo.haiId}}">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="l-first-tus">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});"></figure>
+										{{/each}}
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+
+								</p>
+							</article>
+							{{/if}} {{/if}}
+							<!--   小图靠右-->
+							{{if ifo.coverPositionFlag == "SMALL_RIGHT"}} {{if ifo.haiArticleType == "VIDEO"}}
+							<article class="new-item2">
+								<a href="/view/detail2.html?articleId={{ifo.haiId}}">
+									<div class="item-d">
+										<h5 class="h">{{ifo.haiTitle}}</h5>
+										<div class="item-t-cover">
+											{{each ifo.coverImageList as image}}
+											<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+											{{/each}}
+											<span class="video-len">{{ifo.videoLengthStr}}</span></div>
+									</div>
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+
+								</p>
+							</article>
+							{{else if ifo.haiArticleType == "RICH_TEXT"}}
+							<article class="new-item2">
+								<a href="/view/detail1.html?articleId={{ifo.haiId}}">
+									<div class="item-d">
+										<h5 class="h">{{ifo.haiTitle}}</h5>
+										<div class="item-t-cover">
+											{{each ifo.coverImageList as image}}
+											<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+											{{/each}}
+										</div>
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+
+								</p>
+							</article>
+							{{else }}
+							<article class="new-item2">
+								<a href="/view/detail.html?articleId={{ifo.haiId}}">
+									<div class="item-d">
+										<h5 class="h">{{ifo.haiTitle}}</h5>
+										<div class="item-t-cover">
+											{{each ifo.coverImageList as image}}
+											<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+											{{/each}}
+										</div>
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+								</p>
+							</article>
+							{{/if}} {{/if}}
+							<!--   大图居中-->
+							{{if ifo.coverPositionFlag == "BIG_CENTER"}} {{if ifo.haiArticleType == "VIDEO"}}
+							<article class="new-item3">
+								<a href="/view/detail2.html?articleId={{ifo.haiId}}">
+									<div class="item-d">
+										<h5 class="h">{{ifo.haiTitle}}</h5>
+										<!--   大图居中  可能为视频和图片-->
+										<div class="item-video">
+											{{each ifo.coverImageList as image}}
+											<!--<img src="{{image.url}}">-->
+											<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+											{{/each}}
+											<span class="video-len">{{ifo.videoLengthStr}}</span>
+										</div>
+
+									</div>
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+
+								</p>
+							</article>
+							{{else if ifo.haiArticleType == "IMAGE"}}
+							<article class="new-item5">
+								<a href="/view/detail.html?articleId={{ifo.haiId}}">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+
+									<div class="more-tus">
+										<div class="l-first-tus my-gallery">
+											{{each ifo.coverImageList as image}}
+											<figure>
+
+												<div class="img-dv">
+													<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+													<img src="{{image.url}}" onload="resize_img(this)" />
+													<!--	</a>-->
+												</div>
+
+											</figure>
+											{{/each}}
+										</div>
+										<!--   <span>+10</span> -->
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+
+								</p>
+							</article>
+							{{else}}
+							<article class="new-item5">
+								<a href="/view/detail1.html?articleId={{ifo.haiId}}">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+
+									<div class="more-tus">
+										<div class="l-first-tus my-gallery">
+											{{each ifo.coverImageList as image}}
+											<figure>
+
+												<div class="img-dv">
+													<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+													<img src="{{image.url}}" onload="resize_img(this)" />
+													<!--	</a>-->
+												</div>
+
+											</figure>
+											{{/each}}
+										</div>
+										<!--   <span>+10</span> -->
+									</div>
+								</a>
+								<p class="fo">
+									<span>{{ifo.ownName}}</span>
+									<span>{{ifo.haiReadCount}}阅读</span>
+									<span>{{ifo.commentCount}}评论</span>
+									<button class="atTop">置顶</button>
+								</p>
+							</article>
+							{{/if}} {{/if}} {{/if}} {{/each}}
+
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+		<script>
+            $(function(){
+                $(".fbz-gu").click(function(){
+                    var userId = sanmi.queryParam("userId");
+                    var publisherId = sanmi.queryParam("publisherId");
+                    if (userId == null || userId == "" || userId == "null"){
+                        alert("暂未登陆,请登录");
+                        window.location.href="/view/login.html";
+                        return false;
+                    }
+                    if($(this).hasClass("fbz-nogu")){
+                        $(this).removeClass("fbz-nogu");
+                        $(this).html("关注");
+                        var param = {
+                            url: '/headline/article/publisher/follow/create',
+                            data: {
+                                'publisherId': publisherId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'followHander',
+                        }
+                        sanmi.query(param);
+                    }else{
+                        $(this).addClass("fbz-nogu");
+                        $(this).html("已关注");
+                        var param = {
+                            url: '/headline/article/publisher/follow/cancel',
+                            data: {
+                                'publisherId': publisherId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'followHander',
+                        }
+                        sanmi.query(param);
+                    }
+                })
+            })
+            //处理返回值
+            function followHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if(status == "0") {
+                    alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+            }
+		</script>
+	</body>
+</html>

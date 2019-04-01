@@ -1,0 +1,119 @@
+package com.sanmi.microservice.headline.common.interceptors;
+
+import com.hengyu.tools.http.HttpClientTools;
+import com.hengyu.tools.validate.ValidateTools;
+import com.sanmi.microservice.headline.configuration.properties.WeiXinProperties;
+import com.sanmi.microservice.headline.weixin.service.AccessTokenService;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * 微信第三方自动登录拦截器
+ *
+ * @author：于起宇 <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018/3/27
+ * Time：上午9:33
+ * 简书：http://www.jianshu.com/u/092df3f77bca
+ * ================================
+ */
+
+@Component
+public class WeiXinAutoLoginInterceptor implements HandlerInterceptor {
+    /**
+     * 微信access_token业务逻辑实现类
+     */
+    @Autowired
+    private AccessTokenService accessTokenService;
+
+    /**
+     * 微信配置信息实体
+     */
+    @Autowired
+    private WeiXinProperties weiXinProperties;
+
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(WeiXinAutoLoginInterceptor.class);
+
+    /**
+     * 处理拦截器请求
+     *
+     * @param request  请求对象
+     * @param response 相应对象
+     * @param handler  控制处理器
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String code = request.getParameter("code");
+       // System.out.println("拦截地址:"+request.getRequestURL());
+        logger.info("拦截地址：{}",request.getRequestURL());
+        if (ValidateTools.isNotEmpty(code)) {
+            String requestUrl = String.format(weiXinProperties.getGetAccessTokenOAuthUrl(), weiXinProperties.getAppId(), weiXinProperties.getAppSecret(), code);
+            /**
+             * 发送请求
+             */
+            String result = send(requestUrl);
+            /**
+             *  使用code换取access_token,openid
+             */
+            JSONObject jsonObject = JSONObject.fromObject(result);
+            // 如果请求成功
+            if (null != jsonObject) {
+                String access_token = jsonObject.getString("access_token");
+                String openid = jsonObject.getString("openid");
+                //根据access_token,openid获取用户信息
+                requestUrl =   String.format(weiXinProperties.getGetUserInfoUrl(),access_token,openid);
+                 result = send(requestUrl);
+                jsonObject =  JSONObject.fromObject(result);
+                if(jsonObject == null){
+                    return false;
+                }
+                //将用户信息存储到session中
+                HttpSession session = request.getSession(true);
+                session.setAttribute("userInfo",jsonObject);
+            }else {
+                return false;
+            }
+        }else{
+            //code为空时,跳转到用户登录页面
+           // String toPath = request.getContextPath() + "/view/login.html";
+          //  response.sendRedirect(toPath);
+        }
+
+        return true;
+    }
+
+    /**
+     * 格式化请求路径
+     *
+     * @param access_token
+     * @return
+     */
+    String formartUrl(String access_token, String nextOpenId) throws Exception {
+        return String.format(weiXinProperties.getGetUserInfoUrl(), access_token, ValidateTools.isEmpty(nextOpenId) ? "" : nextOpenId);
+    }
+
+    /**
+     * 发送请求
+     *
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    String send(String url) throws Exception {
+        return HttpClientTools.post(url);
+    }
+}

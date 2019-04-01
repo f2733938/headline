@@ -1,0 +1,40 @@
+$(function() {
+	var articleId = sanmi.queryParam("articleId");
+	var userId = sanmi.queryParam("userId");
+	//妇幼头条文章对应评论
+	articleCommentList();
+
+		function articleCommentList() {
+		var param = {
+			url: '/headline/article/comment/list',
+			data: {
+				'articleId': articleId,
+				'userId': userId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'articleCommentHander',
+		}
+		sanmi.query(param);
+	}
+});
+//处理返回值
+function articleCommentHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+		alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+	var html = template('typefloorList', json);
+	console.info(json);
+	//console.info(html);
+	//$(".typeList").html(html);
+	document.getElementById('comment_sec').innerHTML = html;
+	var userId = sanmi.queryParam("userId");
+	var articleId = sanmi.queryParam("articleId");
+	$("#userId").val(userId);
+		$("#articleId").val(articleId);
+	//$("#back").attr("href","detail.html?articleId="+articleId+"&userId="+userId);
+}

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/image-auto.js"></script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=6b60eec86d3cc545cb1ca87f6e82060a&plugin=AMap.Geocoder"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/showArticleList.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+
+		<script>
+			$(function() {
+				$(".nav-list a").click(function() {
+					$(this).addClass("selected").siblings().removeClass("selected");
+				})
+				$.each($(".l-first-tus figure"),
+					function(i, e) {
+						$(e).height($(e).width() * 0.66);
+					});
+				$(".new-item5 .l-first-tus figure").height($(".new-item5 .l-first-tus figure").width() * 0.58);
+				$(".guanzhu").unbind();
+				$(".guanzhu").click(function() {
+					if($(this).hasClass("yiguanzhu")) {
+						$(this).removeClass("yiguanzhu");
+						$(this).html("关注");
+					} else {
+						$(this).addClass("yiguanzhu");
+						$(this).html("已关注");
+					}
+				})
+			})
+		</script>
+	</head>
+
+	<body>
+		<div class="fixed-idx">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="pull-left">
+					<span style="background-image:url(/resources/images/bofang.png);" class="user-head" onclick="person()"></span>
+				</a>
+				<h1 class="title">妇幼头条</h1>
+				<a href="javascript:;" class="pull-right" onclick="jump()">
+					<img src="/resources/images/xiangji.png" class="photo-icon"></a>
+			</header>
+			<div class="navs clearfix" id="typeList">
+				<script id="typefloorList" type="text/html">
+					<nav class="nav-list clearfix">
+						<a href="index.html?recommend=true" id="recommend">推荐</a>
+						<a href="" id="local">本地</a>
+						{{each info as ifo}}
+						<a href="index.html?secondLevelArticleTypeId={{ifo.htId}}" id="{{ifo.htId}}">{{ifo.htName}}</a>
+						{{/each}}
+					</nav>
+					<a href="channel.html" class="release">
+						<img src="/resources/images/bianji.png"></a>
+				</script>
+			</div>
+		</div>
+		<div class="page_idx">
+			<div class="content">
+				<div class="search">
+					<article>
+						<img src="/resources/images/sousuo.png">
+						<a href="search.html" id="search">
+							<input type="search" placeholder="输入想搜索内容的关键词">
+							<input type="hidden" id="cityCode" /></article>
+					</a>
+				</div>
+				<div class="line-con" id="content1">
+					<script id="stickfloorList" type="text/html">
+						{{each info as ifo}} {{if ifo.haiIsTop == "Y"}} {{if ifo.coverPositionFlag == "THREE_LIST"}} {{if ifo.haiArticleType == "IMAGE"}}
+						<article class="new-item4">
+							<a href="detail.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+							</a>
+							<div class="more-tus">
+								<div class="l-first-tus my-gallery">
+									{{each ifo.coverImageList as image}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}">
+
+												<img src="{{image.url}}" onload="resize_img(this)">
+											</a>
+										</div>
+										<!--  <figcaption itemprop="caption description">{{image.ctiImageUrl}}</figcaption>-->
+									</figure>
+									{{/each}}
+								</div>
+								<span>+{{ifo.coverImageList.length}}</span>
+							</div>
+
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span>{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+								<button class="atTop">置顶</button>
+							</p>
+						</article>
+						{{else}}
+						<article class="new-item">
+							<a href="detail1.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+								<div class="l-first-tus">
+									{{each ifo.coverImageList as image}}
+									<figure style="background-image: url({{image.url}});"></figure>
+									{{/each}}
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span>{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+								<button class="atTop">置顶</button>
+							</p>
+						</article>
+						{{/if}} {{/if}}
+						<!--   小图靠右-->
+						{{if ifo.coverPositionFlag == "SMALL_RIGHT"}} {{if ifo.haiArticleType == "VIDEO"}}
+						<article class="new-item2">
+							<a href="detail2.html?articleId={{ifo.haiId}}">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-t-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+										<span class="video-len">{{ifo.videoLengthStr}}</span></div>
+								</div>
+				</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+					<button class="atTop">置顶</button>
+				</p>
+				</article>
+				{{else if ifo.haiArticleType == "RICH_TEXT"}}
+				<article class="new-item2">
+					<a href="detail1.html?articleId={{ifo.haiId}}">
+						<div class="item-d">
+							<h5 class="h">{{ifo.haiTitle}}</h5>
+							<div class="item-t-cover">
+								{{each ifo.coverImageList as image}}
+								<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+								{{/each}}
+							</div>
+						</div>
+					</a>
+					<p class="fo">
+						<span>{{ifo.ownName}}</span>
+						<span>{{ifo.haiReadCount}}阅读</span>
+						<span>{{ifo.commentCount}}评论</span>
+						<button class="atTop">置顶</button>
+					</p>
+				</article>
+				{{else }}
+				<article class="new-item5">
+				<a href="detail.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+
+					<div class="more-tus">
+						<div class="l-first-tus my-gallery">
+							<figure>
+								{{each ifo.coverImageList as image}}
+								<div class="img-dv">
+									<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+									<img src="{{image.url}}" onload="resize_img(this)" />
+									<!--	</a>-->
+								</div>
+								{{/each}}
+							</figure>
+						</div>
+						<!--   <span>+10</span> -->
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+					<button class="atTop">置顶</button>
+				</p>
+			</article>
+				{{/if}} {{/if}}
+				<!--   大图居中-->
+				{{if ifo.coverPositionFlag == "BIG_CENTER"}} {{if ifo.haiArticleType == "VIDEO"}}
+				<article class="new-item3">
+					<a href="detail2.html?articleId={{ifo.haiId}}">
+						<div class="item-d">
+							<h5 class="h">{{ifo.haiTitle}}</h5>
+							<!--   大图居中  可能为视频和图片-->
+							<div class="item-video">
+								{{each ifo.coverImageList as image}}
+								<!--<img src="{{image.url}}">-->
+								<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+								{{/each}}
+								<span class="video-len">{{ifo.videoLengthStr}}</span>
+							</div>
+
+						</div>
+			</div>
+			</a>
+			<p class="fo">
+				<span>{{ifo.ownName}}</span>
+				<span>{{ifo.haiReadCount}}阅读</span>
+				<span>{{ifo.commentCount}}评论</span>
+				<button class="atTop">置顶</button>
+			</p>
+			</article>
+			{{else if ifo.haiArticleType == "IMAGE"}}
+			<article class="new-item5">
+				<a href="detail.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+
+					<div class="more-tus">
+						<div class="l-first-tus my-gallery">
+							<figure>
+								{{each ifo.coverImageList as image}}
+								<div class="img-dv">
+									<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+									<img src="{{image.url}}" onload="resize_img(this)" />
+									<!--	</a>-->
+								</div>
+								{{/each}}
+							</figure>
+						</div>
+						<!--   <span>+10</span> -->
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+					<button class="atTop">置顶</button>
+				</p>
+			</article>
+				{{else}}
+				<article class="new-item2">
+					<a href="detail1.html?articleId={{ifo.haiId}}">
+						<div class="item-d">
+							<h5 class="h">{{ifo.haiTitle}}</h5>
+							<div class="item-t-cover">
+								{{each ifo.coverImageList as image}}
+								<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+								{{/each}}
+							</div>
+						</div>
+					</a>
+					<p class="fo">
+						<span>{{ifo.ownName}}</span>
+						<span>{{ifo.haiReadCount}}阅读</span>
+						<span>{{ifo.commentCount}}评论</span>
+						<button class="atTop">置顶</button>
+					</p>
+				</article>
+			{{/if}} {{/if}} {{/if}} {{/each}}
+			</script>
+		</div>
+		<div class="line-con" id="content2"></div>
+		<script id="floorList" type="text/html">
+			{{each info as ifo}} {{if ifo.haiIsTop != "Y"}} {{if ifo.coverPositionFlag == "THREE_LIST"}} {{if ifo.haiArticleType == "IMAGE"}}
+			<article class="new-item4">
+				<a href="detail.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+				</a>
+				<div class="more-tus">
+					<div class="l-first-tus my-gallery">
+						{{each ifo.coverImageList as image}}
+						<figure>
+							<div class="img-dv">
+								<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}">
+
+									<img src="{{image.url}}" onload="resize_img(this)">
+								</a>
+							</div>
+							<!--  <figcaption itemprop="caption description">{{image.ctiImageUrl}}</figcaption>-->
+						</figure>
+						{{/each}}
+					</div>
+					<!--<figcaption itemprop="caption description">{{image.ctiImageUrl}}</figcaption>-->
+				</div>
+				<span>+{{ifo.coverImageList.length}}</span>
+				</div>
+
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+				</p>
+			</article>
+			{{else}}
+			<article class="new-item">
+				<a href="detail1.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+					<div class="l-first-tus">
+						{{each ifo.coverImageList as image}}
+						<figure style="background-image: url({{image.url}});"></figure>
+						{{/each}}
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+			</article>
+			{{/if}} {{/if}}
+			<!--   小图靠右-->
+			{{if ifo.coverPositionFlag == "SMALL_RIGHT"}} {{if ifo.haiArticleType == "VIDEO"}}
+			<article class="new-item2">
+				<a href="detail2.html?articleId={{ifo.haiId}}">
+					<div class="item-d">
+						<h5 class="h">{{ifo.haiTitle}}</h5>
+						<div class="item-t-cover">
+							{{each ifo.coverImageList as image}}
+							<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+							{{/each}}
+							<span class="video-len">{{ifo.videoLengthStr}}</span></div>
+					</div>
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+			</article>
+			{{else if ifo.haiArticleType == "RICH_TEXT"}}
+			<article class="new-item2">
+				<a href="detail1.html?articleId={{ifo.haiId}}">
+					<div class="item-d">
+						<h5 class="h">{{ifo.haiTitle}}</h5>
+						<div class="item-t-cover">
+							{{each ifo.coverImageList as image}}
+							<figure style="background-image: url({{image.ctiImageUrl}});" class="l-first-tus"></figure>
+							{{/each}}
+						</div>
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+			</article>
+			{{else }}
+				<article class="new-item5">
+				<a href="detail.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+
+					<div class="more-tus">
+						<div class="l-first-tus my-gallery">
+							<figure>
+								{{each ifo.coverImageList as image}}
+								<div class="img-dv">
+									<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+									<img src="{{image.url}}" onload="resize_img(this)" />
+									<!--	</a>-->
+								</div>
+								{{/each}}
+							</figure>
+						</div>
+						<!--   <span>+10</span> -->
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+				</p>
+			</article>
+			{{/if}} {{/if}}
+			<!--   大图居中-->
+			{{if ifo.coverPositionFlag == "BIG_CENTER"}} {{if ifo.haiArticleType == "VIDEO"}}
+			<article class="new-item3">
+				<a href="detail2.html?articleId={{ifo.haiId}}">
+					<div class="item-d">
+						<h5 class="h">{{ifo.haiTitle}}</h5>
+						<!--   大图居中  可能为视频和图片-->
+						<div class="item-video">
+							{{each ifo.coverImageList as image}}
+							<!--<img src="{{image.url}}">-->
+							<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+							{{/each}}
+							<span class="video-len">{{ifo.videoLengthStr}}</span>
+						</div>
+
+					</div>
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+			</article>
+			{{else if ifo.haiArticleType == "IMAGE"}}}
+			<article class="new-item5">
+				<a href="detail.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+
+					<div class="more-tus">
+						<div class="l-first-tus my-gallery">
+							<figure>
+								{{each ifo.coverImageList as image}}
+								<div class="img-dv">
+									<a href="{{image.ctiImageUrl}}" data-size="">
+										<img src="{{image.ctiImageUrl}}" onload="resize_img(this)" />
+									</a>
+								</div>
+								{{/each}}
+								<figcaption itemprop="caption description">{{ifo.haiContent}}</figcaption>
+							</figure>
+						</div>
+						<!--   <span>+10</span> -->
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+			</article>
+				{{else}}
+				<article class="new-item2">
+					<a href="detail1.html?articleId={{ifo.haiId}}">
+						<div class="item-d">
+							<h5 class="h">{{ifo.haiTitle}}</h5>
+							<div class="item-t-cover">
+								{{each ifo.coverImageList as image}}
+								<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+								{{/each}}
+							</div>
+						</div>
+					</a>
+					<p class="fo">
+						<span>{{ifo.ownName}}</span>
+						<span>{{ifo.haiReadCount}}阅读</span>
+						<span>{{ifo.commentCount}}评论</span>
+					</p>
+				</article>
+			{{/if}} {{/if}} {{/if}} {{/each}}
+		</script>
+		</div>
+
+		</div>
+		</div>
+		<script>
+			window.onload = function() {
+				auto_data_size();
+
+			};
+
+			function auto_data_size() {
+				var imgss = $("figure img");
+				$("figure img").each(function() {
+					var imgs = new Image();
+					imgs.src = $(this).attr("src");
+					var w = imgs.width,
+						h = imgs.height;
+					$(this).parent("a").attr("data-size", "").attr("data-size", w + "x" + h);
+				})
+			};
+		</script>
+		<script>
+			function jump() {
+				//debugger;
+				var userId = sanmi.queryParam("userId");
+				var cityCode = $("#cityCode").val();
+				var param = {
+					url: '/headline/publisher/apply/detail',
+					data: {
+						'userId': userId,
+					},
+					method: 'post',
+					dataType: 'json',
+					callback: 'applyStatusHander',
+				}
+				sanmi.query(param);
+			}
+
+			function applyStatusHander(json) {
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+				//	debugger;
+				console.info(json);
+				//获取用户申请资质信息,判断跳转页面
+				var userId = sanmi.queryParam("userId");
+				var cityCode = $("#cityCode").val();
+				if(json.info == "") {
+					$(".pull-right").attr("href", "qualification-apply.html?userId=" + userId + "&area=" + cityCode);
+				} else {
+					if(json.info.publishTypeFlag == "DOCTOR") {
+						$(".pull-right").attr("href", "qualification-apply-result.html?userId=" + userId);
+					} else {
+						$(".pull-right").attr("href", "operators-qualification-apply-result.html?userId=" + userId);
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>

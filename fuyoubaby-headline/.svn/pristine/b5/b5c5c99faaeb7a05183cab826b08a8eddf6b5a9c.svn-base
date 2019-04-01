@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+		<script type="text/javascript" src="/resources/listjs/person_infol.js"></script>
+		<script type="text/javascript" src="/resources/js/dropzone.js"></script>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a class="icon icon-left pull-left" href="javascript:;" onclick="back()"></a>
+				<h1 class="title">个人资料</h1>
+			</header>
+			<div class="content">
+				<div class="per-list">
+					<article class="w_bg per-head">
+
+						<a href="javascript:;" class="create-actions clearfix ">
+							<span class="pull-left">头像</span>
+							<div class="pull-right">
+								<span style="background-image:url(/resources/images/tx_mr4.png)" id="head"></span>
+
+								<input type="file" id="dropz" hidden="hidden" />
+							</div>
+						</a>
+
+					</article>
+					<article class="w_bg promot-code clearfix per-dl">
+						<a href="javascript:;" class="clearfix" onclick="changeName()">
+							<span class="pull-left">昵称</span>
+							<div class="pull-right">
+								<span id="nickName">李淑芬</span>
+							</div>
+						</a>
+					</article>
+					<article class="w_bg clearfix per-dl sex-selection">
+						<a href="javascript:;" class="clearfix">
+							<span class="pull-left">性别</span>
+							<div class="pull-right">
+								<span id="sex">女</span>
+							</div>
+						</a>
+					</article>
+					<article class="w_bg clearfix per-dl birth-date">
+						<a href="javascript:;" class="clearfix">
+							<span class="pull-left">生日</span>
+							<div class="pull-right">
+								<span><input type="text" id="birth-date" value="2018-12-05"></span>
+							</div>
+						</a>
+					</article>
+					<article class="w_bg clearfix per-dl">
+						<a href="javascript:;" class="clearfix">
+							<span class="pull-left">绑定手机</span>
+							<div class="pull-right">
+								<span id="telephone">15269159206</span>
+							</div>
+						</a>
+					</article>
+				</div>
+				<!--性别-->
+				<div class="sex-box w_bg">
+					<p>选择性别</p>
+					<article class="clearfix">
+						<span><img src="/resources/images/weixuanzhong.png" id="man">男</span>
+						<span><img src="/resources/images/xuanzhong.png" id="woman">女</span>
+					</article>
+				</div>
+			</div>
+			<!--遮罩层-->
+			<div class="bound"></div>
+		</div>
+		<script>
+			/*性别*/
+			$(".sex-box article span").click(function() {
+				$(".sex-box article span").find("img").attr('src', "/resources/images/weixuanzhong.png");
+				if($(this).find("img").attr("src") == "/resources/images/weixuanzhong.png") {
+					$(this).find("img").attr("src", "/resources/images/xuanzhong.png");
+				} else {
+					$(this).find("img").attr("src", "/resources/images/weixuanzhong.png");
+				}
+			})
+			$(".sex-selection").click(function() {
+				$(".bound,.sex-box").show()
+			})
+			$(".bound").click(function() {
+				$(this).hide();
+				$(".sex-box").hide();
+                var userId = sanmi.queryParam("userId");
+				var src = $("#man").attr("src");
+				var sex = 0; //默认为女
+                $("#sex").html("女");
+				if (src == "/resources/images/xuanzhong.png"){
+						sex = 1;
+                    $("#sex").html("男");
+				}
+                var param = {
+                    url: '/user/info/change',
+                    data: {
+                        'userid': userId,
+                        "sex":sex,
+                    },
+                    method: 'post',
+                    dataType: 'json',
+                    callback: 'applyStatusHander',
+                }
+                sanmi.query(param);
+			})
+			/*生日*/
+			$("#birth-date").calendar({
+				value: [$("#birth-date").val()]
+			});
+            $("#birth-date").change(function() {
+                //alert("改变");
+                var userId = sanmi.queryParam("userId");
+				var birthday = $("#birth-date").val();
+				if (birthday != null ){
+                    var param = {
+                        url: '/user/info/change',
+                        data: {
+                            'userid': userId,
+							"birthday":birthday
+                        },
+                        method: 'post',
+                        dataType: 'json',
+                        callback: 'applyStatusHander',
+                    }
+                    sanmi.query(param);
+				}
+			})
+			function  applyStatusHander(json){
+                if(status == "0") {
+                    alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+			}
+			function  changeName() {
+                var userId = sanmi.queryParam("userId");
+                var nickName = $("#nickName").html();
+				window.location.href="/view/person/person-nicheng.html?userId="+userId+"&nickName="+encodeURI(encodeURI(nickName));
+            }
+		</script>
+	</body>
+
+</html>

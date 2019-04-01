@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/applyjs/apply_view.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="icon icon-left pull-left" onclick="window.history.back()"></a>
+				<h1 class="title">申请发布资质</h1>
+			</header>
+			<div class="content" style="background:#fff">
+				<!--状态-->
+				<div class="apply-statue" id="waiting">
+					<img src="/resources/images/waite.png">
+					<p>您的申请已经提交，请保持电话畅通！</p>
+				</div>
+				<div class="apply-statue" style="display: none;" id="refuse">
+					<img src="/resources/images/jinggao.png">
+					<p>很抱歉，您没有通过发布者资质审核！</p>
+					<small id="refuse_reason">拒绝原因：您上传的身份证号码与照片证件号码不统一，请您改后重新上传！</small>
+					<article class="apply-again">
+						<a href="javascript:;" onclick="edit()">修改提交</a>
+						<a href="javascript:;" onclick="abandon()">放弃申请</a>
+						<input type="hidden" id="userId"></input>
+						<input type="hidden" id="applyId"></input>
+					</article>
+				</div>
+				<div class="apply-statue" style="display: none;" id="agree">
+					<img src="/resources/images/wancheng.png">
+					<p>您已获得发布者资质！</p>
+				</div>
+				<article class="qualificat-item">
+					<header>
+						<h4>基本信息</h4>
+					</header>
+					<div class="list-block">
+						<ul>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-name"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">申请类型</div>
+										<div class="item-input">
+											<input type="text" readonly="readonly" value="职业医生">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-email"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">姓名</div>
+										<div class="item-input">
+											<input type="text" value="yanyaya" readonly="readonly" id="userName">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-gender"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">性别</div>
+										<div class="item-input">
+											<input type="text" value="女" readonly="readonly" id="sex">
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-calendar"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">出生日期</div>
+										<div class="item-input">
+											<input type="date" value="2018-02-22" readonly="readonly" id="birthday">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-toggle"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">身份证号</div>
+										<div class="item-input">
+											<input type="text" value="25613645862354" id="idCard">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="align-top">
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-comment"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">工作地区</div>
+										<div class="item-input">
+
+											<input type="text" readonly="readonly" value="山东省济南市历下区" id="area">
+
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</article>
+				<article class="qualificat-item" style="border-top:0.5rem solid #f8f8f8">
+					<header>
+						<h4>工作信息</h4>
+					</header>
+					<div class="list-block">
+						<ul>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-toggle"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">卫生机构</div>
+										<div class="item-input">
+											<input type="text" id="inst-input" value="山东省立医院东院" readonly="readonly" id="padHospital">
+
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-toggle"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">科室</div>
+										<div class="item-input">
+											<input type="text" value="儿科" readonly="readonly" id="padDepartment">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-toggle"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">职称</div>
+										<div class="item-input">
+											<input type="text" value="主治医师" readonly="readonly" id="padTitle">
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</article>
+				<article class="indent-proof" style="border-top:0.5rem solid #f8f8f8">
+					<header>
+						<h4>身份证明</h4>
+					</header>
+					<div class="indent clearfix" id="imageList">
+						<script id="applyView" type="text/html">
+							{{each imageList as ifo i}}
+							<article {{if i%2==1 }} class="indent-right" {{/if}}>
+								<a href="javascript:;">
+									<div style="background-image: url({{ifo.imageUrl}});"></div>
+									<p class="indent-p">*{{ ifo.imageTypeName }}</p>
+								</a>
+							</article>
+							{{/each}}
+						</script>
+					</div>
+				</article>
+
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$(".sex-input span").click(function() {
+
+					if($(this).find("img").attr("src") == "images/wxz.png") {
+						$(".sex-input span").find("img").attr("src", "/resources/images/wxz.png");
+						$(this).find("img").attr("src", "/resources/images/yxz.png");
+					} else {
+						$(".sex-input span").find("img").attr("src", "/resources/images/wxz.png");
+						$(this).find("img").attr("src", "/resources/images/wxz.png");
+					}
+				})
+			})
+
+			function edit() {
+				var userId = $("#userId").val();
+				//alert(userId);
+				window.location.href = "qualification_apply_edit.html?userId=" + userId;
+			}
+
+			function abandon() {
+				//alert("asd");
+				var userId = $("#userId").val();
+				var applyId = $("#applyId").val();
+				var param = {
+					url: '/headline/publisher/apply/cancel',
+					data: {
+						'userId': userId,
+						'userName': applyId,
+					},
+					method: 'post',
+					dataType: 'json',
+					callback: 'followHander',
+				}
+				sanmi.query(param);
+			}
+			//处理返回值
+			function followHander(json) {
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+				window.location.href = "qualification-apply.html?userId=" + userId;		
+			}
+		</script>
+	</body>
+
+</html>

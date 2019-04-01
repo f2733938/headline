@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/css.css" />
+        <script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+        <script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/rulel.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+	</head>
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="icon icon-left pull-left"></a>
+			    <h1 class="title">妇幼宝贝及妇幼头条运营规则</h1>
+			</header>
+			<div class="content" style="background:#fff">
+				<div style="font-size: 0.7rem;padding:0.5rem">
+					<p id="content">妇幼宝贝及妇幼头条运营规则妇幼宝贝及妇幼头条运营规则妇幼宝贝及妇幼头条运营规则妇幼宝贝及妇幼头条运营规则妇幼宝贝及妇幼头条运营规则妇幼宝贝及妇幼头条运营规则妇幼宝贝及妇幼头条运营规则</p>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+</html>

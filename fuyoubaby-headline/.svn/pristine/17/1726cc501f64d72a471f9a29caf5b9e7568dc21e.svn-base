@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="expires" content="60">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <title></title>
+
+    <link rel="stylesheet" href="/resources/css/reset.css"/>
+    <link rel="stylesheet" href="/resources/css/css.css"/>
+    <link rel="stylesheet" href="/resources/css/swiper-4.1.6.min.css"/>
+    <script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+    <script>jQuery.noConflict()</script>
+    <script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+
+    <script type="text/javascript" src="/resources/js/swiper-4.1.6.min.js"></script>
+    <script type="text/javascript" src="/resources/base/httpClient.js"></script>
+    <script type="text/javascript" src="/resources/listjs/detail_video.js"></script>
+    <script type="text/javascript" src="/resources/js/template.js"></script>
+    <script type="text/javascript" src="/resources/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript" src="/resources/js/share.js"></script>
+    <!--弹窗实现-->
+    <link rel="stylesheet" href="/resources/css/weui.min.css"/>
+    <link rel="stylesheet" href="/resources/css/jquery-weui.min.css"/>
+    <script type="text/javascript" src="/resources/js/jquery-weui.min.js"></script>
+</head>
+<body>
+<div class="page">
+    <div class="content" style="background:#fff">
+        <div class="detail-video">
+            <div id="detail_video"></div>
+            <script id="stickfloorList" type="text/html">
+                <video width="100%" height="240" controls autoplay=true {{if coverImageList.length == 0}}  poster="/resources/images/toutiao_mrt1.png" {{else}}  	{{each coverImageList as image}} poster="{{image.url}}" {{/each}} {{/if}}>
+                    <source src="{{videoInfo.url}}" type="video/mp4">
+                </video>
+            </script>
+        </div>
+        <h5 class="detail-title" id="detail_title"></h5>
+        <small class="headings" id="headings">fdsfsd</small>
+        <div>
+            <article class="detail-top clearfix">
+                <div class="pull-left">
+                    <span style="background-image: url(/resources/images/tx_mr4.png);" class="detail-head"
+                          onclick="publisherInfo()"></span>
+                    <div>
+                        <p id="ownName"></p>
+                        <time id="haiCreateTime">02-14 12:00</time>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <img src="/resources/images/yiguanzhu.png"
+                         style="width:1.2rem;display: inline-block;vertical-align: middle;" id="guanzhu">
+                    <i style="font-size: 0.7rem;" id="focusCount">12.5万</i>
+                    <input type="hidden" id="haiId"/>
+                    <input type="hidden" id="publisherId"/>
+                    <input type="hidden" id="userId"/>
+                </div>
+            </article>
+
+            <div class="comment-sec">
+                <header>用户评论(<i id="commentCount">500</i>)</header>
+                <section>
+                    <div id="comment_sec"></div>
+                    <script id="typefloorList" type="text/html">
+                        {{each info as ifo}}
+                        <article class="comment-item">
+                            {{if ifo.userHeadImage == ""}}
+                            <span style="background-image:url(/resources/images/tx_mr4.png);" class="item-head"></span>
+                            {{else}}
+                            <span style="background-image:url({{ifo.userHeadImage}});" class="item-head"></span>
+                            {{/if}}
+                            <div>
+                                <p class="item-p0 clearfix">
+                                    <!--<a href="javascript:;" hidden="hidden" id="hacArticleId">{{ifo.hacArticleId}}</a>-->
+                                    <span style="color:#31567f;">{{ifo.userName}}</span>
+                                    {{if ifo.hasLike == "Y"}}
+                                    <span class="clickPraise"><img src="/resources/images/yizan.png" id="{{ifo.hacId}}"><i
+                                            style="color:#f84a4b">{{ifo.hacLikeCount}}</i></span>
+                                    {{else}}
+                                    <span class="clickPraise"><img src="/resources/images/zan.png" id="{{ifo.hacId}}" onclick="zan(this)"><i
+                                            style="color:#90a2af">{{ifo.hacLikeCount}}</i></span>
+                                    {{/if}}
+                                </p>
+                                <p class="item-p1">{{ifo.hacContent}}</p>
+                                <time>{{ifo.hacCreateTime}}</time>
+                                {{if ifo.hacUserId == userId }}
+                                <span class="clickDel" id="{{ifo.hacId}}" onclick="detel(this.id)">删除</span>
+                                {{/if}}
+                            </div>
+                        </article>
+                        {{/each}}
+
+                        </section>
+                        </div>
+                        </div>
+                    </script>
+
+            </div>
+            <footer class="detail-footer">
+                <div class="pull-left">
+                    <img src="/resources/images/pinglun-b.png">
+                    <input type="text" placeholder="写评论..." id="comment" maxlength="200">
+                </div>
+                <span class="pull-right">
+			        	<img src="/resources/images/shoucang1.png" id="clickCollect">
+						<a href="javascript:;" id="pinglun">发送</a>
+			        </span>
+            </footer>
+        </div>
+        <script>
+            var page = 2;
+            $(function () {
+                $(window).scroll(function () {
+                    //$(window).scrollTop()这个方法是当前滚动条滚动的距离
+                    //$(window).height()获取当前窗体的高度
+                    //$(document).height()获取当前文档的高度
+                    var bot = 50; //bot是底部距离的高度
+
+                    if ((bot + $(window).scrollTop()) >= ($(document).height() - $(window).height())) {
+                        //当底部基本距离+滚动的高度〉=文档的高度-窗体的高度时；
+                        //我们需要去异步加载数据了
+                        //debugger;
+                        var articleId = sanmi.queryParam("articleId");
+                        var userId = sanmi.queryParam("userId");
+                        var param = {
+                            url: '/headline/article/comment/list',
+                            data: {
+                                'articleId': articleId,
+                                'userId': userId,
+                                'page': page,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'articleCommentaHander',
+                        }
+                        sanmi.query(param);
+                        // $.getJSON("url", { page: "2" }, function (str) { alert(str); });
+                    }
+                });
+                //关注逻辑实现
+                var articleId = $("#haiId").val();
+                var publisherId = $("#publisherId").val();
+                var userId = $("#userId").val();
+                var detail_title = $("#detail_title").html();
+                //测试环境分享地址
+                //var link = 'http://develop.fangxinyuesao.com/cdn/share/headline/detail-video.html?articleId='+articleId;
+                //正式环境分享地址
+                var link = 'http://m.fuyoutoutiao.com/cdn/share/detail-video.html?articleId='+articleId;
+                $("#guanzhu").click(function () {
+                    if (userId == null || userId == "" || userId == "null") {
+                        alert("暂未登陆,请登录");
+                        window.location.href = "/view/login.html";
+                        return false;
+                    }
+                    if ($(this).attr("src") == "/resources/images/yiguanzhu.png") {
+                        $(this).attr("src", "/resources/images/guanzhu.png");
+                        var param = {
+                            url: '/headline/article/publisher/follow/cancel',
+                            data: {
+                                'publisherId': publisherId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'followHander',
+                        }
+                        sanmi.query(param);
+                    } else {
+                        $(this).attr("src", "/resources/images/yiguanzhu.png");
+                        var param = {
+                            url: '/headline/article/publisher/follow/create',
+                            data: {
+                                'publisherId': publisherId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'followaHander',
+                        }
+                        sanmi.query(param);
+                    }
+                })
+                //评论逻辑实现
+                $("#pinglun").click(function () {
+                    if (userId == null || userId == "" || userId == "null") {
+                        $.alert("暂未登陆,请登录");
+                        window.location.href = "/view/login.html";
+                        return false;
+                    }
+                    var comment = $("#comment").val();
+                    if (comment == "") {
+                        $.alert("评论不能为空");
+                        return false;
+                    }
+                    var param = {
+                        url: '/headline/article/comment/create',
+                        data: {
+                            'content': comment,
+                            'userId': userId,
+                            'articleId': articleId,
+                        },
+                        method: 'post',
+                        dataType: 'json',
+                        callback: 'commentHander',
+                    }
+                    sanmi.query(param);
+                })
+                //点赞逻辑实现
+/*                $.each($(".comment-item"), function (i, e) {
+                    $(e).find(".clickPraise").click(function () {
+                        if ($(this).find("img").attr("src") == "/resources/images/zan.png") {
+                            var num = parseInt($(this).find("i").html());
+                            $(this).find("img").attr("src", "/resources/images/yizan.png");
+                            $(this).find("i").css("color", "#f84a4b");
+                            $(this).find("i").html(num + 1);
+                        }
+                        /!**else{
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/zan.png");
+							$(this).find("i").css("color","#90a2af");
+							$(this).find("i").html(num-1);
+						}*!/
+                        var commentId = $(this).find("img").attr("id");
+                        if (userId == null || userId == "" || userId == "null") {
+                            alert("暂未登陆,请登录");
+                            window.location.href = "/view/login.html";
+                            return false;
+                        }
+                        var param = {
+                            url: '/headline/article/comment/like',
+                            data: {
+                                'commentId': commentId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'likeHander',
+                        }
+                        sanmi.query(param);
+                    })
+                    //删除评论逻辑实现
+                    //删除评论操作
+                    $(e).find(".clickDel").click(function () {
+                        debugger;
+                        var commentId = $(this).attr("id");
+                        //判断登录状态,跳转登录页面
+                        if (userId == null || userId == "" || userId == "null") {
+                            alert("暂未登陆,请登录");
+                            window.location.href = "/view/login.html";
+                            return false;
+                        }
+                        var param = {
+                            url: '/headline/article/comment/delete',
+                            data: {
+                                'commentId': commentId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'deleteCommentHander',
+                        }
+                        sanmi.query(param);
+                    })
+                });*/
+                /*收藏*/
+                $("#clickCollect").click(function () {
+                    if (userId == null || userId == "" || userId == "null") {
+                        $.alert("暂未登陆,请登录");
+                        window.location.href = "/view/login.html";
+                        return false;
+                    }
+                    if ($(this).attr("src") == "/resources/images/shoucang1.png") {
+                        $(this).attr("src", "/resources/images/yishoucang.png");
+                        var param = {
+                            url: '/headline/article/user/collection/create',
+                            data: {
+                                'articleId': articleId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'collectionHander',
+                        }
+                        sanmi.query(param);
+                    } else {
+                        $(this).attr("src", "/resources/images/shoucang1.png");
+                        var param = {
+                            url: '/headline/article/user/collection/cancel',
+                            data: {
+                                'articleId': articleId,
+                                'userId': userId,
+                            },
+                            method: 'post',
+                            dataType: 'json',
+                            callback: 'cancelCollectionHander',
+                        }
+                        sanmi.query(param);
+                    }
+                })
+                /*分享代码*/
+                wx.ready(function() {
+                    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                    console.log('weixin 验证成功');
+                    // 分享到朋友圈
+                    wx.onMenuShareTimeline({
+                        title: detail_title, // 分享标题
+                        link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'http://develop.fangxinyuesao.com/resources/images/logo.png', // 分享图标
+                        success: function() {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function() {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+
+                    // 分享给朋友
+                    wx.onMenuShareAppMessage({
+                        title: detail_title, // 分享标题
+                        desc: '来自妇幼头条的分享', // 分享描述
+                        link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'http://develop.fangxinyuesao.com/resources/images/logo.png', // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function() {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function() {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+
+                });
+
+                wx.error(function(res) {
+                    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                    console.log('weixin 验证失败');
+                    console.log(res);
+                });
+            })
+
+            //处理返回值
+            function followHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+
+                }
+                $.alert("取消关注成功", function () {
+                    location.reload();
+                });
+            }
+            function deleteCommentHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("删除评论成功", function () {
+                    location.reload();
+                });
+            }
+            function articleCommentaHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if(status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                console.info(json);
+                //console.info(html);
+                //$(".typeList").html(html);
+                var oldhtml =  document.getElementById('comment_sec').innerHTML;
+                //console.info("原网页内容"+oldhtml);
+                var html = template('typefloorList', json);
+                document.getElementById('comment_sec').innerHTML = oldhtml+html ;
+                page++;
+            }
+            function followaHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("关注成功", function () {
+                    location.reload();
+                });
+            }
+
+            //处理返回值
+            function likeHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("点赞成功", function () {
+                    location.reload();
+                });
+            }
+
+            function commentHander(json) {
+                var articleId = sanmi.queryParam("articleId");
+                var userId = sanmi.queryParam("userId");
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("评论成功!");
+                $("#comment").val("");
+                //  debugger;
+                window.location.href = "detail2.html?userId=" + userId + "&articleId=" + articleId;
+            }
+
+            function collectionHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("收藏成功")
+            }
+
+            function collectionaHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("点赞成功")
+            }
+            function  zan(value) {
+                console.log(value);
+                console.log(value.id);
+                //debugger;
+                var userId = $("#userId").val();
+                //com(this);
+                //判断登录状态,跳转登录页面
+                if (userId == null || userId == "" || userId == "null") {
+                    $.alert("暂未登陆,请登录");
+                    window.location.href = "/view/login.html";
+                    return false;
+                }
+                //  value.attr("src", "/resources/images/yizan.png");
+                var param = {
+                    url: '/headline/article/comment/like',
+                    data: {
+                        'commentId': value.id,
+                        'userId': userId,
+                    },
+                    method: 'post',
+                    dataType: 'json',
+                    callback: 'likeHander',
+                }
+                sanmi.query(param);
+            }
+            function  detel(value) {
+                var userId = $("#userId").val();
+                //com(this);
+                //判断登录状态,跳转登录页面
+                if (userId == null || userId == "" || userId == "null") {
+                    $.alert("暂未登陆,请登录");
+                    window.location.href = "/view/login.html";
+                    return false;
+                }
+                var param = {
+                    url: '/headline/article/comment/delete',
+                    data: {
+                        'commentId': value,
+                        'userId': userId,
+                    },
+                    method: 'post',
+                    dataType: 'json',
+                    callback: 'deleteCommentHander',
+                }
+                sanmi.query(param);
+            }
+            function cancelCollectionHander(json) {
+                var status = json.status;
+                //console.info(status);
+                if (status == "0") {
+                    $.alert(json.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                $.alert("取消收藏成功")
+            }
+
+            function publisherInfo() {
+                var publisherId = $("#publisherId").val();
+                var userId = $("#userId").val();
+                window.location.href = "fabuzhe.html?userId=" + userId + "&publisherId=" + publisherId;
+            }
+        </script>
+</body>
+</html>

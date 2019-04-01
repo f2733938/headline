@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: fuyoubaby-headline
+  # 开发阶段不使用
+  thymeleaf:
+    cache: false
+  profiles:
+    active: beta
+# 端口号
+server:
+  port: 9090

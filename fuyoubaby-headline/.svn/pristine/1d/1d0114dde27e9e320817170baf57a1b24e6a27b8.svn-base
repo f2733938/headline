@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+		<script type="text/javascript" src="/resources/listjs/person_infol.js"></script>
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<article class="p-baseinfo">
+					<a href="javascript:;" onclick="person_info()" id="person_info">
+						<span style="background-image:url(/resources/images/tx_mr4.png)" id="head"></span>
+						<p id="nickName">GrayKam旺旺</p>
+					</a>
+				</article>
+				<article class="p-fun clearfix">
+					<span>
+						<a href="javascript:;" onclick="user_histroy()">
+						<i><img src="/resources/images/history-icon.png"></i>
+						<i>历史</i>
+						</a>
+					</span>
+					<span>
+						<a href="javascript:;" onclick="user_collect()">
+						<i><img src="/resources/images/collect-icon.png"></i>
+						<i>收藏</i>
+						</a>
+					</span>
+					<span>
+						<a href="javascript:;" onclick="user_focus()">
+						<i><img src="/resources/images/heart-icon.png"></i>
+						<i>关注</i>
+						</a>
+					</span>
+				</article>
+			<!--	<a href="javascript:;" class="person-login" onclick="loginOut()">退出登录</a>-->
+			</div>
+		</div>
+	</body>
+</html>

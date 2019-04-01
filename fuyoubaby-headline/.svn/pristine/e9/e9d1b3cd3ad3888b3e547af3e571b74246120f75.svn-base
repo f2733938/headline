@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="css/sm.min.css" />
+		<link rel="stylesheet" href="css/reset.css" />
+		<link rel="stylesheet" href="css/css.css" />
+		<link rel="stylesheet" href="css/swiper-4.1.6.min.css" />
+		<script type="text/javascript" src="js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/sm.min.js"></script>
+		<script type="text/javascript" src="js/swiper-4.1.6.min.js"></script>
+		<script type="text/javascript" src="base/httpClient.js"></script>
+		<script type="text/javascript" src="listjs/detail_editor.js"></script>
+		<script type="text/javascript" src="js/template.js"></script>
+	</head>
+
+	<body>
+		<div class="page">
+			<div class="content" style="background:#fff">
+				<h5 class="detail-title" id="detail_title"></h5>
+				<div>
+					<!--<script id="stickfloorList" type="text/html">-->
+					<article class="detail-top clearfix">
+						<div class="pull-left">
+							<span style="background-image: url(images/list1.png);" class="detail-head"></span>
+							<div>
+								<p id="ownName"></p>
+								<time id="haiCreateTime">02-14 12:00</time>
+							</div>
+						</div>
+						<div class="pull-right">
+							<a href="javascript:;" class="guanzhu" id="guanzhu">关注</a>
+							<a href="javascript:;" id="haiId" hidden="hidden"></a>
+							<a href="javascript:;" id="publisherId" hidden="hidden"></a>
+							<input type="hidden" id="publisherId" />
+							<input type="hidden" id="haiId" />
+							<input type="hidden" id="userId" />
+						</div>
+					</article>
+					<!--	</script>-->
+					<div class="detail-con" id="container">
+
+					</div>
+					<div class="comment-sec">
+						<header>用户评论(<i id="commentCount"></i>)</header>
+						<div id="comment_sec"></div>
+						<script id="typefloorList" type="text/html">
+							<section>
+								{{each info as ifo}}
+								<article class="comment-item">
+									<span style="background-image:url({{ifo.userHeadImage}});" class="item-head"></span>
+									<div>
+										<p class="item-p0 clearfix">
+											<!--<a href="javascript:;" hidden="hidden" id="hacArticleId">{{ifo.hacArticleId}}</a>-->
+											<span style="color:#31567f;">{{ifo.userName}}</span> {{if ifo.hasLike == "Y"}}
+											<span class="clickPraise"><img src="images/yizan.png" id="{{ifo.hacId}}"><i style="color:#f84a4b">{{ifo.hacLikeCount}}</i></span> {{else}}
+											<span class="clickPraise"><img src="images/zan.png" id="{{ifo.hacId}}"><i style="color:#90a2af">{{ifo.hacLikeCount}}</i></span> {{/if}}
+										</p>
+										<p class="item-p1">{{ifo.hacContent}}</p>
+										<time>{{ifo.hacCreateTime}}</time>
+									</div>
+								</article>
+								{{/each}}
+							</section>
+						</script>
+					</div>
+
+				</div>
+				<footer class="detail-footer">
+					<div class="pull-left">
+						<img src="images/pinglun-b.png" id="pinglun">
+						<input type="text" placeholder="写评论..." id="comment">
+					</div>
+					<span class="pull-right">
+			        	<img src="images/shoucang1.png" id="clickCollect">
+			        </span>
+				</footer>
+
+			</div>
+			<!--图片预览-->
+			<div class="picturePreview">
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<img src="images/list1.png">
+						</div>
+						<div class="swiper-slide">
+							<img src="images/list2.png">
+						</div>
+						<div class="swiper-slide">
+							<img src="images/aaa.jpg">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				var articleId = $("#haiId").val();
+				var publisherId = $("#publisherId").val();
+				var userId = $("#userId").val();
+				$(".guanzhu").click(function() {
+					if($(this).hasClass("yiguanzhu")) {
+						$(this).removeClass("yiguanzhu");
+						$(this).html("关注");
+						var param = {
+							url: '/headline/article/publisher/follow/cancel',
+							data: {
+								'publisherId': publisherId,
+								'userId': userId,
+							},
+							method: 'post',
+							dataType: 'json',
+							callback: 'followHander',
+						}
+						sanmi.query(param);
+					} else {
+						$(this).addClass("yiguanzhu");
+						$(this).html("已关注");
+						var param = {
+							url: '/headline/article/publisher/follow/create',
+							data: {
+								'publisherId': publisherId,
+								'userId': userId,
+							},
+							method: 'post',
+							dataType: 'json',
+							callback: 'followHander',
+						}
+						sanmi.query(param);
+					}
+				})
+				//评论逻辑实现
+				$("#pinglun").click(function() {
+					var comment = $("#comment").val();
+					var param = {
+						url: '/headline/article/comment/create',
+						data: {
+							'content': comment,
+							'userId': userId,
+							'articleId': articleId,
+						},
+						method: 'post',
+						dataType: 'json',
+						callback: 'commentHander',
+					}
+					sanmi.query(param);
+				})
+				$.each($(".comment-item"), function(i, e) {
+					$(e).find(".clickPraise").click(function() {
+						if($(this).find("img").attr("src") == "images/zan.png") {
+							var num = parseInt($(this).find("i").html());
+							$(this).find("img").attr("src", "images/yizan.png");
+							$(this).find("i").css("color", "#f84a4b");
+							$(this).find("i").html(num + 1);
+						}
+						/*else{
+													var num=parseInt($(this).find("i").html());
+													$(this).find("img").attr("src","images/zan.png");
+													$(this).find("i").css("color","#90a2af");
+													$(this).find("i").html(num-1);
+												}*/
+						var commentId = $(this).find("img").attr("id");
+						var param = {
+							url: '/headline/article/comment/like',
+							data: {
+								'commentId': commentId,
+								'userId': userId,
+							},
+							method: 'post',
+							dataType: 'json',
+							callback: 'collectionHander',
+						}
+						sanmi.query(param);
+					})
+				});
+				/*收藏*/
+				$("#clickCollect").click(function() {
+					if($(this).attr("src") == "images/shoucang1.png") {
+						$(this).attr("src", "images/yishoucang.png");
+						var param = {
+							url: '/headline/article/user/collection/create',
+							data: {
+								'articleId': articleId,
+								'userId': userId,
+							},
+							method: 'post',
+							dataType: 'json',
+							callback: 'collectionHander',
+						}
+						sanmi.query(param);
+					} else {
+						$(this).attr("src", "images/shoucang1.png");
+						var param = {
+							url: '/headline/article/user/collection/cancel',
+							data: {
+								'articleId': articleId,
+								'userId': userId,
+							},
+							method: 'post',
+							dataType: 'json',
+							callback: 'collectionHander',
+						}
+						sanmi.query(param);
+					}
+				})
+				/*图片预览*/
+				$(".detail-con img").click(function() {
+					if($(".detail-con img").length == 1) {
+						var flag = false;
+					} else {
+						var flag = true;
+					}
+					$(".detail-con img").addClass("detail-img");
+					var img_index = $(".detail-con .detail-img").index($(this));
+					console.info(img_index);
+					$(".picturePreview").show();
+					var mySwiper = new Swiper('.swiper-container', {
+						direction: 'horizontal',
+						loop: flag,
+						slidesPerView: 'auto',
+						initialSlide: img_index,
+						observer: true, //修改swiper自己或子元素时，自动初始化swiper
+						observeParents: true, //修改swiper的父元素时，自动初始化swiper
+					})
+				})
+
+				$(".picturePreview").click(function() {
+					img_index = $(this).hide();
+				})
+
+			})
+			//处理返回值
+			function followHander(json) {
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+			}
+			//处理返回值
+			function likeHander(json) {
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+			}
+
+			function commentHander(json) {
+				var articleId = sanmi.queryParam("articleId");
+				var userId = sanmi.queryParam("userId");				
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+				alert("评论成功!");
+				$("#comment").val("");
+				window.location.href="detail1.html?userId="+userId+"&articleId="+articleId;
+			}
+
+			function collectionHander(json) {
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+			}
+			function backIndex(){
+				var userId = $("#userId").val();
+				window.location.href="index.html?userId="+userId+"&recommend";
+			}			
+		</script>
+	</body>
+
+</html>

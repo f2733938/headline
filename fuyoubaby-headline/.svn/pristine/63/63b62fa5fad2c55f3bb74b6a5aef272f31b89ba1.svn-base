@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="css/sm.min.css" />
+		<link rel="stylesheet" href="css/reset.css" />
+		<link rel="stylesheet" href="css/css.css" />
+		<link rel="stylesheet" href="css/basic.css" />
+		<link rel="stylesheet" href="css/dropzone.css" />
+		<script type="text/javascript" src="js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/sm.min.js"></script>
+		<script type="text/javascript" src="js/dropzone.js"></script>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="icon icon-left pull-left"></a>
+				<h1 class="title">申请发布资质</h1>
+			</header>
+			<div class="content" style="background:#fff">
+				<article class="qualificat-item">
+					<header>
+						<h4>基本信息</h4>
+					</header>
+					<div class="list-block">
+						<ul>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-name"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">申请类型</div>
+										<div class="item-input">
+											<select>
+												<option value="HOSPITAL">职业医生</option>
+												<option value="DOCTOR">卫生机构</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-email"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">卫生机构</div>
+										<div class="item-input">
+											<input type="text" placeholder="输入您申请卫生机构全称" value="orgName">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="align-top">
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-comment"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">所在地区</div>
+										<div class="item-input">
+											<a href="javascript:;" class="arrow-icon">
+												<input type="text" placeholder="地区信息" readonly="readonly">
+											</a>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-email"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">运营者</div>
+										<div class="item-input">
+											<input type="text" placeholder="输入您的真实姓名">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-email"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">手机号</div>
+										<div class="item-input">
+											<input type="tel" placeholder="输入运营者手机号码">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-gender"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">性别</div>
+										<div class="item-input sex-input">
+											<span><img src="images/wxz.png">男</span>
+											<span><img src="images/yxz.png">女</span>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-calendar"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">出生日期</div>
+										<div class="item-input">
+											<input type="date" placeholder="请选择你的出生日期" value="2018-02-22">
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-media"><i class="icon icon-form-toggle"></i></div>
+									<div class="item-inner">
+										<div class="item-title label">身份证号</div>
+										<div class="item-input">
+											<input type="text" placeholder="输入您的身份证号">
+										</div>
+									</div>
+								</div>
+							</li>
+
+						</ul>
+					</div>
+				</article>
+
+				<article class="indent-proof" style="border-top:0.5rem solid #f8f8f8">
+					<header>
+						<h4>身份证明</h4>
+					</header>
+					<div>
+						<!--class="indent clearfix"-->
+						<article>
+							<a href="javascript:;">
+								<div>
+									<div id="dropz" class="dropzone"> </div>
+								</div>
+								<p class="indent-p">*运营者身份证正面</p>
+							</a>
+						</article>
+						<article class="indent-right">
+							<a href="javascript:;">
+								<div id="dropa" class="dropzone"></div>
+								<p class="indent-p">*运营者身份证反面</p>
+							</a>
+						</article>
+						<article>
+							<a href="javascript:;">
+								<div id="dropb" class="dropzone"></div>
+								<p class="indent-p">*手持身份证正面</p>
+							</a>
+						</article>
+						<article class="indent-right">
+							<a href="javascript:;">
+								<div id="dropc" class="dropzone"></div>
+								<p class="indent-p">*卫生机构营业执照</p>
+							</a>
+						</article>
+						<article>
+							<a href="javascript:;">
+								<div id="dropd" class="dropzone"></div>
+								<p class="indent-p">其他说明证件（1）</p>
+							</a>
+						</article>
+						<article class="indent-right">
+							<a href="javascript:;">
+								<div id="drope" class="dropzone"></div>
+								<p class="indent-p">其他说明证件（2）</p>
+							</a>
+						</article>
+					</div>
+				</article>
+				<div class="qualificate-footer">
+					<a href="javascript:;" class="qualificate-btn">提交审核</a>
+					<p><input type="checkbox" checked>我已仔细阅读并同意
+						<a href="yunying-rule.html">《妇幼宝贝及妇幼头条运营规则》</a>
+					</p>
+					<small>妇幼头条申请资质说明：凡申请妇幼头条发布人者必须为在职或退休医生、护士等医疗行业从业者，或者医院及保健机构负责人！请上传您的资质证件，通过平台审核后才可发布。</small>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$(".sex-input span").click(function() {
+
+					if($(this).find("img").attr("src") == "images/wxz.png") {
+						$(".sex-input span").find("img").attr("src", "images/wxz.png");
+						$(this).find("img").attr("src", "images/yxz.png");
+					} else {
+						$(".sex-input span").find("img").attr("src", "images/wxz.png");
+						$(this).find("img").attr("src", "images/wxz.png");
+					}
+				})
+				//var appElement = document.querySelector('div .inmodal');
+				var myDropzone = new Dropzone("#dropz", {
+					url: "http://develop.fangxinyuesao.com/api/v2/headline/publisher/apply/image/upload?userId=88dd2c0b-6dda-11e7-9c0d-fa163ef28f43&imageType=ID_CARD_POSITIVE&applyId=7087fb71-3380-4643-a25b-5eb27d18f221", //文件提交地址
+					method: "post", //也可用put
+					paramName: "image", //默认为file
+					maxFiles: 1, //一次性上传的文件数量上限
+					maxFilesize: 2, //文件大小，单位：MB
+					acceptedFiles: ".jpg,.gif,.png,.jpeg", //上传的类型
+					addRemoveLinks: true,
+					parallelUploads: 1, //一次上传的文件数量
+					//previewsContainer:"#preview",//上传图片的预览窗口
+					dictDefaultMessage: '点击上传',
+					dictMaxFilesExceeded: "您最多只能上传1个文件！",
+					dictResponseError: '文件上传失败!',
+					dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg。",
+					dictFallbackMessage: "浏览器不受支持",
+					dictFileTooBig: "文件过大上传文件最大支持.",
+					dictRemoveLinks: "删除",
+					dictCancelUpload: "取消",
+					init: function() {
+						this.on("addedfile", function(file) {
+							//上传文件时触发的事件
+							document.querySelector('div .dz-default').style.display = 'none';
+						});
+						this.on("success", function(file, data) {
+							//上传成功触发的事件
+							console.log('ok');
+						});
+						this.on("error", function(file, data) {
+							//上传失败触发的事件
+							console.log('fail');
+						});
+						this.on("removedfile", function(file) {
+							//删除文件时触发的方法
+							angular.element(appElement).scope().file_id = 0;
+							document.querySelector('div .dz-default').style.display = 'block';
+						});
+					}
+				});
+				var myDropzone1 = new Dropzone("#dropa", {
+					url: "http://develop.fangxinyuesao.com/api/v2/headline/publisher/apply/image/upload?userId=88dd2c0b-6dda-11e7-9c0d-fa163ef28f43&imageType=ID_CARD_POSITIVE&applyId=7087fb71-3380-4643-a25b-5eb27d18f221", //文件提交地址
+					method: "post", //也可用put
+					paramName: "image", //默认为file
+					maxFiles: 1, //一次性上传的文件数量上限
+					maxFilesize: 2, //文件大小，单位：MB
+					acceptedFiles: ".jpg,.gif,.png,.jpeg", //上传的类型
+					addRemoveLinks: true,
+					parallelUploads: 1, //一次上传的文件数量
+					//previewsContainer:"#preview",//上传图片的预览窗口
+					dictDefaultMessage: '点击上传',
+					dictMaxFilesExceeded: "您最多只能上传1个文件！",
+					dictResponseError: '文件上传失败!',
+					dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg。",
+					dictFallbackMessage: "浏览器不受支持",
+					dictFileTooBig: "文件过大上传文件最大支持.",
+					dictRemoveLinks: "删除",
+					dictCancelUpload: "取消",
+					init: function() {
+						this.on("addedfile", function(file) {
+							//上传文件时触发的事件
+							document.querySelector('div .dz-default').style.display = 'none';
+						});
+						this.on("success", function(file, data) {
+							//上传成功触发的事件
+							console.log('ok');
+						});
+						this.on("error", function(file, data) {
+							//上传失败触发的事件
+							console.log('fail');
+						});
+						this.on("removedfile", function(file) {
+							//删除文件时触发的方法
+							angular.element(appElement).scope().file_id = 0;
+							document.querySelector('div .dz-default').style.display = 'block';
+						});
+					}
+				});
+				var myDropzone2 = new Dropzone("#dropb", {
+					url: "http://develop.fangxinyuesao.com/api/v2/headline/publisher/apply/image/upload?userId=88dd2c0b-6dda-11e7-9c0d-fa163ef28f43&imageType=ID_CARD_POSITIVE&applyId=7087fb71-3380-4643-a25b-5eb27d18f221", //文件提交地址
+					method: "post", //也可用put
+					paramName: "image", //默认为file
+					maxFiles: 1, //一次性上传的文件数量上限
+					maxFilesize: 2, //文件大小，单位：MB
+					acceptedFiles: ".jpg,.gif,.png,.jpeg", //上传的类型
+					addRemoveLinks: true,
+					parallelUploads: 1, //一次上传的文件数量
+					//previewsContainer:"#preview",//上传图片的预览窗口
+					dictDefaultMessage: '点击上传',
+					dictMaxFilesExceeded: "您最多只能上传1个文件！",
+					dictResponseError: '文件上传失败!',
+					dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg。",
+					dictFallbackMessage: "浏览器不受支持",
+					dictFileTooBig: "文件过大上传文件最大支持.",
+					dictRemoveLinks: "删除",
+					dictCancelUpload: "取消",
+					init: function() {
+						this.on("addedfile", function(file) {
+							//上传文件时触发的事件
+							document.querySelector('div .dz-default').style.display = 'none';
+						});
+						this.on("success", function(file, data) {
+							//上传成功触发的事件
+							console.log('ok');
+						});
+						this.on("error", function(file, data) {
+							//上传失败触发的事件
+							console.log('fail');
+						});
+						this.on("removedfile", function(file) {
+							//删除文件时触发的方法
+							angular.element(appElement).scope().file_id = 0;
+							document.querySelector('div .dz-default').style.display = 'block';
+						});
+					}
+				});
+				var myDropzone3 = new Dropzone("#dropc", {
+					url: "http://develop.fangxinyuesao.com/api/v2/headline/publisher/apply/image/upload?userId=88dd2c0b-6dda-11e7-9c0d-fa163ef28f43&imageType=ID_CARD_POSITIVE&applyId=7087fb71-3380-4643-a25b-5eb27d18f221", //文件提交地址
+					method: "post", //也可用put
+					paramName: "image", //默认为file
+					maxFiles: 1, //一次性上传的文件数量上限
+					maxFilesize: 2, //文件大小，单位：MB
+					acceptedFiles: ".jpg,.gif,.png,.jpeg", //上传的类型
+					addRemoveLinks: true,
+					parallelUploads: 1, //一次上传的文件数量
+					//previewsContainer:"#preview",//上传图片的预览窗口
+					dictDefaultMessage: '点击上传',
+					dictMaxFilesExceeded: "您最多只能上传1个文件！",
+					dictResponseError: '文件上传失败!',
+					dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg。",
+					dictFallbackMessage: "浏览器不受支持",
+					dictFileTooBig: "文件过大上传文件最大支持.",
+					dictRemoveLinks: "删除",
+					dictCancelUpload: "取消",
+					init: function() {
+						this.on("addedfile", function(file) {
+							//上传文件时触发的事件
+							document.querySelector('div .dz-default').style.display = 'none';
+						});
+						this.on("success", function(file, data) {
+							//上传成功触发的事件
+							console.log('ok');
+						});
+						this.on("error", function(file, data) {
+							//上传失败触发的事件
+							console.log('fail');
+						});
+						this.on("removedfile", function(file) {
+							//删除文件时触发的方法
+							angular.element(appElement).scope().file_id = 0;
+							document.querySelector('div .dz-default').style.display = 'block';
+						});
+					}
+				});
+				var myDropzone4 = new Dropzone("#dropd", {
+					url: "http://develop.fangxinyuesao.com/api/v2/headline/publisher/apply/image/upload?userId=88dd2c0b-6dda-11e7-9c0d-fa163ef28f43&imageType=ID_CARD_POSITIVE&applyId=7087fb71-3380-4643-a25b-5eb27d18f221", //文件提交地址
+					method: "post", //也可用put
+					paramName: "image", //默认为file
+					maxFiles: 1, //一次性上传的文件数量上限
+					maxFilesize: 2, //文件大小，单位：MB
+					acceptedFiles: ".jpg,.gif,.png,.jpeg", //上传的类型
+					addRemoveLinks: true,
+					parallelUploads: 1, //一次上传的文件数量
+					//previewsContainer:"#preview",//上传图片的预览窗口
+					dictDefaultMessage: '点击上传',
+					dictMaxFilesExceeded: "您最多只能上传1个文件！",
+					dictResponseError: '文件上传失败!',
+					dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg。",
+					dictFallbackMessage: "浏览器不受支持",
+					dictFileTooBig: "文件过大上传文件最大支持.",
+					dictRemoveLinks: "删除",
+					dictCancelUpload: "取消",
+					init: function() {
+						this.on("addedfile", function(file) {
+							//上传文件时触发的事件
+							document.querySelector('div .dz-default').style.display = 'none';
+						});
+						this.on("success", function(file, data) {
+							//上传成功触发的事件
+							console.log('ok');
+						});
+						this.on("error", function(file, data) {
+							//上传失败触发的事件
+							console.log('fail');
+						});
+						this.on("removedfile", function(file) {
+							//删除文件时触发的方法
+							angular.element(appElement).scope().file_id = 0;
+							document.querySelector('div .dz-default').style.display = 'block';
+						});
+					}
+				});
+				var myDropzone5 = new Dropzone("#drope", {
+					url: "http://develop.fangxinyuesao.com/api/v2/headline/publisher/apply/image/upload?userId=88dd2c0b-6dda-11e7-9c0d-fa163ef28f43&imageType=ID_CARD_POSITIVE&applyId=7087fb71-3380-4643-a25b-5eb27d18f221", //文件提交地址
+					method: "post", //也可用put
+					paramName: "image", //默认为file
+					maxFiles: 1, //一次性上传的文件数量上限
+					maxFilesize: 2, //文件大小，单位：MB
+					acceptedFiles: ".jpg,.gif,.png,.jpeg", //上传的类型
+					addRemoveLinks: true,
+					parallelUploads: 1, //一次上传的文件数量
+					//previewsContainer:"#preview",//上传图片的预览窗口
+					dictDefaultMessage: '点击上传',
+					dictMaxFilesExceeded: "您最多只能上传1个文件！",
+					dictResponseError: '文件上传失败!',
+					dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg。",
+					dictFallbackMessage: "浏览器不受支持",
+					dictFileTooBig: "文件过大上传文件最大支持.",
+					dictRemoveLinks: "删除",
+					dictCancelUpload: "取消",
+					init: function() {
+						this.on("addedfile", function(file) {
+							//上传文件时触发的事件
+							document.querySelector('div .dz-default').style.display = 'none';
+						});
+						this.on("success", function(file, data) {
+							//上传成功触发的事件
+							console.log('ok');
+						});
+						this.on("error", function(file, data) {
+							//上传失败触发的事件
+							console.log('fail');
+						});
+						this.on("removedfile", function(file) {
+							//删除文件时触发的方法
+							angular.element(appElement).scope().file_id = 0;
+							document.querySelector('div .dz-default').style.display = 'block';
+						});
+					}
+				});
+			})
+		</script>
+	</body>
+
+</html>

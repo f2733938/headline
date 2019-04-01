@@ -1,0 +1,181 @@
+package com.sanmi.microservice.headline.common.interceptors;
+
+import com.hengyu.tools.http.HttpClientTools;
+import com.hengyu.tools.validate.ValidateTools;
+import com.sanmi.core.framework.security.tools.ApiSecurityPostTools;
+import com.sanmi.microservice.headline.common.Constants;
+import com.sanmi.microservice.headline.configuration.properties.WeiXinProperties;
+import com.sanmi.microservice.headline.login.params.UserInfoParam;
+import com.sanmi.microservice.headline.weixin.service.AccessTokenService;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
+
+/**
+ * 微信第三方自动登录拦截器
+ *
+ * @author：于起宇 <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018/3/27
+ * Time：上午9:33
+ * 简书：http://www.jianshu.com/u/092df3f77bca
+ * ================================
+ */
+
+@Component
+public class WeiXinAutoLoginInterceptor implements HandlerInterceptor {
+    /**
+     * 微信access_token业务逻辑实现类
+     */
+    @Autowired
+    private AccessTokenService accessTokenService;
+
+    /**
+     * 微信配置信息实体
+     */
+    @Autowired
+    private WeiXinProperties weiXinProperties;
+
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(WeiXinAutoLoginInterceptor.class);
+
+    /**
+     * 处理拦截器请求
+     *
+     * @param request  请求对象
+     * @param response 相应对象
+     * @param handler  控制处理器
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String code = request.getParameter("code");
+        System.out.println("code的值为:" + code);
+        logger.info("拦截地址：{}", request.getRequestURL());
+        //从第三方访问主页时
+        String query =  request.getQueryString();
+        if(query != null){
+            if(query.contains(Constants.FLAG)){
+                return true;
+            }
+        }
+        HttpSession session = request.getSession(true);
+        com.alibaba.fastjson.JSONObject userInfo = (com.alibaba.fastjson.JSONObject) session
+                .getAttribute("userInfo");
+        if (userInfo != null) {
+            logger.info("session有值放行：{}",session);
+            String url =  request.getRequestURL().toString();
+             query =  request.getQueryString();
+            logger.info("访问地址====>"+url);
+            logger.info("参数的值====>"+query);
+            //访问主页时,需加载原有参数
+            if(url.contains(Constants.INDEX)){
+                if(query == "" || query == null){
+                    logger.info("user的信息====>"+userInfo.getString("id"));
+                    String redirect = url+ "?recommend=true&userId="+userInfo.getString("id");
+                    response.sendRedirect(redirect);
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            if (ValidateTools.isNotEmpty(code)) {
+                String requestUrl = String.format(weiXinProperties.getGetAccessTokenOAuthUrl(), weiXinProperties.getAppId(), weiXinProperties.getAppSecret(), code);
+                /**
+                 * 发送请求
+                 */
+                String result = send(requestUrl);
+                /**
+                 *  使用code换取access_token,openid
+                 */
+                JSONObject jsonObject = JSONObject.fromObject(result);
+                // 如果请求成功
+                if (null != jsonObject) {
+                    // String access_token = jsonObject.getString("access_token");
+                    String openid = jsonObject.getString("openid");
+                    logger.info("openId====>"+openid);
+                    //根据openId获取用户信息
+                    UserInfoParam param = new UserInfoParam();
+                    param.setOpenId(openid);
+                    //妇幼头条微信公众号
+                    param.setPlatform(Constants.PLATFORM);
+                    param.setUserFlag("U");
+                        String url = Constants.interfaceAddress + "user/login/platform";
+                    com.alibaba.fastjson.JSONObject resultInfo = ApiSecurityPostTools.sendResultJson(url, param);
+                    logger.info("获取的用户信息====>"+resultInfo);
+                    logger.info("获取参数====>"+param);
+                    if (resultInfo.getString("info").equals("")) {
+                        //用户信息为空时,跳转到绑定用户页面
+                        logger.info("<====获取不到用户信息,跳转绑定页面====>");
+                        String toPath = request.getContextPath() + "/view/bangding.html?openId=" + openid;
+                        response.sendRedirect(toPath);
+                        return false;
+                    }
+                    logger.info("已经获取到用户信息====>"+resultInfo);
+                    logger.info("即将存入session的信息====>"+resultInfo.getJSONObject("info"));
+                    //将用户信息存储到session中
+                    session.setAttribute("userInfo", resultInfo.getJSONObject("info"));
+                    //处理链接地址,前端以userId作为登录的标识,此处进行添加
+                    String redirect = request.getRequestURL().toString()+ "?recommend=true&userId="+resultInfo.getJSONObject("info").getString("id");
+                    response.sendRedirect(redirect);
+                    return false;
+                } else {
+                    String toPath = request.getContextPath() + "/view/login.html";
+                    response.sendRedirect(toPath);
+                    return false;
+                }
+            } else {
+                //设置重定向地址，需要进行UrlEncode
+                String redirect = request.getRequestURL().toString();
+                // redirect = redirect + "?" + request.getQueryString();
+                //判断 是否是微信浏览器
+                String userAgent = request.getHeader("user-agent").toLowerCase();
+                if (userAgent.indexOf("micromessenger") < 0) {
+                    //不是微信浏览器,跳转到登录页面
+                    String toPath = request.getContextPath() + "/view/login.html";
+                    response.sendRedirect(toPath);
+                    return false;
+                } else { //微信浏览器,跳转到绑定页面,获取code
+                    String code_url = String.format(weiXinProperties.getGetCodeUrl(), weiXinProperties.getAppId(), URLEncoder.encode(redirect, "UTF-8"), "code", "snsapi_userinfo", "123");
+                    logger.info("获取code的地址====>"+code_url);
+                    // send(code_url);
+                    response.sendRedirect(code_url);
+                    return false;
+                }
+            }
+        }
+   }
+
+    /**
+     * 格式化请求路径
+     *
+     * @param access_token
+     * @return
+     */
+    String formartUrl(String access_token, String nextOpenId) throws Exception {
+        return String.format(weiXinProperties.getGetUserInfoUrl(), access_token, ValidateTools.isEmpty(nextOpenId) ? "" : nextOpenId);
+    }
+
+    /**
+     * 发送请求
+     *
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    String send(String url) throws Exception {
+        return HttpClientTools.post(url);
+    }
+}

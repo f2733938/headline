@@ -1,0 +1,90 @@
+$(function() {
+
+	//忘记密码
+	$(".ok-btn").click(function(){
+		//alert("点击执行");
+		var phone = $("#phone").val();
+		var dtm = $("#dtm").val();
+		var sms = $("#sms").val();
+		var password = $("#password").val();
+		if(checkPhone(phone) === false){
+            $.alert("手机号码有误，请重填");
+			return;
+		}
+        //debugger;
+		if(dtm === ""){
+			$.alert("动态码有误，请重填");
+			return;
+		}
+		if(sms === ""){
+            $.alert("短信码有误，请重填");
+			return;
+		}
+        if(checkPassword(password) === false){
+            $.alert("密码有误，请输入6-20的数字或字母");
+            return;
+        }
+		var openId = sanmi.queryParam("openId");
+        $.ajax({
+            type : "POST", //提交方式
+            url : "/user/login/bind",//路径
+            data : {
+				'openId' : openId,
+                'phone' : phone,
+                'code' : sms,  //
+                'password' : password,
+				'platform' : "HEADLINE_WECHAT_OPEN"  //妇幼头条微信公众号
+            },//数据，这里使用的是Json格式进行传输
+            success : function(result) {//返回数据根据结果进行相应的处理
+                console.log(result);
+                if(result.status == "0") {
+                    $.alert(result.msg);
+                    //sanmi.toPage("/index.html");
+                    return;
+                }
+                sanmi.setCash("userInfo",result.info);
+                sanmi.toPage("index.html?recommend=true&userId="+result.info.id);
+            }
+
+        });
+	})
+	//获取动态码
+	$("#phone").blur(function(){
+		fetchDTM();
+        $("#invisibility").show();
+	});
+		//看不清
+	$("#invisibility").click(function(){
+		fetchDTM();
+	})
+	function fetchDTM(){
+		var phone = $("#phone").val();
+		if(checkPhone(phone) === false){
+			return;
+		}
+		$("#dtmImage").attr('src',sanmi.serverUrl+"/code/image/get?phone="+phone+"&bz=6&t="+Date.parse(new Date())); 	
+	}
+
+});
+//验证密码
+function checkPassword(password){ 
+    if(!(/^[0-9A-Za-z]{6,20}$/.test(password))){
+        return false; 
+    } 
+}
+//验证手机号
+function checkPhone(phone){ 
+    if(!(/^1[34578]\d{9}$/.test(phone))){ 
+        return false; 
+    } 
+}
+//注册成功
+function registerHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+        $.alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+}

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<link rel="stylesheet" href="/resources/css/weui.min.css"/>
+		<link rel="stylesheet" href="/resources/css/jquery-weui.min.css"/>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/jquery-weui.min.js"></script>
+		<script>jQuery.noConflict()</script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=6b60eec86d3cc545cb1ca87f6e82060a&plugin=AMap.Geocoder"></script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/chooseCity.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+
+		<style>
+			.current-loction img {
+				height: 1.2rem;
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 0.4rem;
+			}
+			
+			.current-loction {
+				background: #fff;
+				height: 8%;
+				padding-top: 3%;
+				padding-left: 2%;
+				font-size: 0.75rem;
+				position: relative;
+			}
+			
+			.current-loction:after {
+				content: "";
+				width: 100%;
+				height: 1px;
+				background: #E7E7E7;
+				position: absolute;
+				left: 0px;
+				bottom: 0px;
+			}
+			
+			.city-box {
+				height: 94%;
+				font-size: 0.7rem;
+			}
+			
+			.adres-box {
+				overflow: hidden;
+				position: relative;
+			}
+			
+			.province-left {
+				float: left;
+				width: 30%;
+				box-shadow: 1px 0 0 #F0F0F0;
+				height: 100%;
+				border-right: 1px solid #E7E7E7;
+				position:relative;
+			}
+			
+			.province-left .letter-title {
+				text-align: center;
+				height: 36px;
+				line-height: 36px;
+				background: #f2f3f2;
+			}
+			
+			.province-left dd {
+				height: 36px;
+				line-height: 36px;
+				background: #FFFFFF;
+				text-align: center;
+				border-bottom: 1px solid #F0F0F0;
+				white-space: nowrap;
+				word-break: break-word;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+			
+			.citys a,
+			.areas a {
+				color: #666666;
+				display: block;
+				width: 100%;
+				text-align: center;
+				height: 36px;
+				line-height: 36px;
+				border-bottom: 1px solid #E7E7E7;
+				background: #fff;
+				border-right: 1px solid #E7E7E7;
+				white-space: nowrap;
+				word-break: break-word;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+			
+			.citys,
+			.areas {
+				width: 35%;
+				float: left;
+				height: 100%;
+				overflow-y: scroll;
+			}
+			
+			.city-box .city-selected {
+				background: #f84a4b;
+				color: #fff
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a class="icon icon-left pull-left" href="/view/index.html"></a>
+				<h1 class="title">选择城市</h1>
+				<input type="hidden" id="userId" />
+				<input type="hidden" id="areaName" />
+				<input type="hidden" id="provincea" />
+				<input type="hidden" id="citya" />
+				<input type="hidden" id="provinceName" />
+				<input type="hidden" id="cityName" />				
+			</header>
+			<div class="content" style="overflow-y: hidden;">
+				<header class="current-loction"><img src="/resources/images/dingwei.png">当前定位：<i id="city"></i></header>
+				<div class="city-box">
+					<div class="province-left" style="overflow-y: scroll;" id="channel">
+						<script id="cityList" type="text/html">
+							<dl>
+								<dt class="letter-title">A</dt>{{each info.provinceList as ifo i}} {{if ifo.aFirstChart == "A"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}} id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">B</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "B"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}} id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">C</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "C"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">F</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "F"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">G</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "G"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">H</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "H"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">J</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "J"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">L</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "L"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">N</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "N"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">Q</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "Q"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">S</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "S"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">T</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "T"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">X</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "X"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">Y</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "Y"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+								<dt class="letter-title">Z</dt>{{each info.provinceList as ifo}} {{if ifo.aFirstChart == "Z"}}
+								<dd {{if ifo.chose=="Y" }} class="city-selected" {{/if}}id="{{ifo.id}}">{{ifo.name}}</dd>
+								{{/if}} {{/each}}
+							</dl>
+						</script>
+					</div>
+					<div class="citys" id="citys">
+						<script id="citysList" type="text/html">
+							{{each info.cityList as ifo }}
+							<a href="javascript:;" {{if ifo.chose=="Y" }}class="city-selected" {{/if}} id="{{ifo.id}}">{{ifo.name}}</a>
+							{{/each}}
+						</script>
+					</div>
+					<div class="areas" id="areas">
+						<script id="areasList" type="text/html">
+							{{each info.areaList as ifo }}
+							<a href="javascript:;" {{if ifo.chose=="Y" }} class="city-selected" {{/if}} id="{{ifo.id}}">{{ifo.name}}</a>
+							{{/each}}
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/sm.min.js"></script>
+		<script>
+			$(function() {
+				var userId = $("#userId").val();
+				var areaName = $("#areaName").val();
+                var platform = sanmi.queryParam("platform");
+				$(".province-left dd").click(function() {
+					$(this).addClass("city-selected").siblings().removeClass("city-selected");
+					var a = $(this).attr("id");
+					$("#provinceName").val($(this).html());
+					window.location.href = "city.html?areaLevel=1&area=" + a + "&userId=" + userId + "&areaName=" + encodeURI(encodeURI(areaName))+"&platform="+platform;
+				})
+				$(".citys a").click(function() {
+					$(this).addClass("city-selected").siblings().removeClass("city-selected");
+
+					//debugger;
+					//获取已经选中的市级ID
+					var a = $(this).attr("id");
+					$("#citya").val($(this).html());
+					window.location.href = "city.html?areaLevel=2&area=" + a + "&userId=" + userId + "&areaName=" + encodeURI(encodeURI(areaName))+"&platform="+platform;
+				})
+				$(".areas a").click(function() {
+					$(this).addClass("city-selected").siblings().removeClass("city-selected");
+
+					var a = $(this).attr("id");
+					var city = $("#citya").val();
+					var province = $("#provincea").val();
+/*					var cityName = $("#cityName").val();
+					var provinceName = $("#provinceName").val();*/
+					window.location.href = sanmi.getCash("jumpUrl")+"?area=" + a + "&userId=" + userId + "&areaName=" + encodeURI(encodeURI(areaName))+"&city="+city+"&province="+province+"&platform="+platform;
+				})
+
+			})
+		</script>
+	</body>
+
+</html>

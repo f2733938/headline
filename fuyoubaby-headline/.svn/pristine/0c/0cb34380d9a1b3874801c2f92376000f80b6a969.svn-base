@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<link rel="stylesheet" href="/resources/css/photoswipe.css" />
+		<link rel="stylesheet" href="/resources/css/default-skin/default-skin.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/photoswipe.js"></script>
+		<script type="text/javascript" src="/resources/js/photoswipe-ui-default.js"></script>
+		<script type="text/javascript" src="/resources/js/image-auto.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+		<script type="text/javascript" src="/resources/listjs/search_result.js"></script>
+		<script>
+			$(function() {
+				$.each($(".l-first-tus figure"),
+					function(i, e) {
+						$(e).height($(e).width() * 0.66);
+					});
+				$(".new-item5 .l-first-tus figure").height($(".new-item5 .l-first-tus figure").width() * 0.58);
+			})
+		</script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="fixed-idx">
+				<header class="bar bar-nav head-bg">
+					<a href="javascript:;" class="black_icon" onclick="back()"><img src="/resources/images/black-icon.png"></a>
+					<h1 class="title">阅读历史</h1>
+				</header>
+			</div>
+			<div style="margin-top:2.2rem">
+				<div class="line-con" style="border-top:1px solid #f0f0f0">
+					<script id="floorList" type="text/html">
+						{{each info as ifo}} {{if ifo.haiIsTop != "Y"}} {{if ifo.coverPositionFlag == "THREE_LIST"}} {{if ifo.haiArticleType == "IMAGE"}}
+						<article class="new-item4">
+							<a href="../detail.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+								<div class="more-tus">
+									<div class="l-first-tus my-gallery">
+										{{each ifo.coverImageList as image}}
+										<figure>
+											<div class="img-dv">
+												<!--	<span class="item-span" data-size="">-->
+												<img src="{{image.url}}" onload="resize_img(this)"></a>
+							</div>
+							<!--<figcaption itemprop="caption description">{{image.ctiImageUrl}}</figcaption>-->
+							</figure>
+							{{/each}}
+							</div>
+							<span>+{{ifo.coverImageList.length}}</span>
+							</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span>{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+							</p>
+						</article>
+						{{else}}
+						<article class="new-item">
+							<a href="../detail1.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+								<div class="l-first-tus">
+									{{each ifo.coverImageList as image}}
+									<figure style="background-image: url({{image.url}});"></figure>
+									{{/each}}
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span>{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{/if}} {{/if}}
+						<!--   小图靠右-->
+						{{if ifo.coverPositionFlag == "SMALL_RIGHT"}} {{if ifo.haiArticleType == "VIDEO"}}
+						<article class="new-item2">
+							<a href="../detail2.html?articleId={{ifo.haiId}}">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-t-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+										<span class="video-len">{{ifo.videoLength}}</span></div>
+								</div>
+				</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+				</article>
+				{{else}}
+				<article class="new-item2">
+					<a href="../detail1.html?articleId={{ifo.haiId}}">
+						<div class="item-d">
+							<h5 class="h">{{ifo.haiTitle}}</h5>
+							<div class="item-t-cover">
+								{{each ifo.coverImageList as image}}
+								<figure style="background-image: url({{image.ctiImageUrl}});" class="l-first-tus"></figure>
+								{{/each}}
+							</div>
+						</div>
+					</a>
+					<p class="fo">
+						<span>{{ifo.ownName}}</span>
+						<span>{{ifo.haiReadCount}}阅读</span>
+						<span>{{ifo.commentCount}}评论</span>
+
+					</p>
+				</article>
+				{{/if}} {{/if}}
+				<!--   大图居中-->
+				{{if ifo.coverPositionFlag == "BIG_CENTER"}} {{if ifo.haiArticleType == "VIDEO"}}
+				<article class="new-item3">
+					<a href="../detail2.html?articleId={{ifo.haiId}}">
+						<div class="item-d">
+							<h5 class="h">{{ifo.haiTitle}}</h5>
+							<!--   大图居中  可能为视频和图片-->
+							<div class="item-video">
+								{{each ifo.coverImageList as image}}
+								<img src="{{image.url}}">
+								<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+								{{/each}}
+								<span class="video-len">{{ifo.videoLengthStr}}</span>
+							</div>
+
+						</div>
+			</div>
+			</a>
+			<p class="fo">
+				<span>{{ifo.ownName}}</span>
+				<span>{{ifo.haiReadCount}}阅读</span>
+				<span>{{ifo.commentCount}}评论</span>
+
+			</p>
+			</article>
+			{{else}}
+			<article class="new-item5">
+				<a href="../detail.html?articleId={{ifo.haiId}}">
+					<h5 class="h">{{ifo.haiTitle}}</h5>
+
+					<div class="more-tus">
+						<div class="l-first-tus my-gallery">
+							<figure>
+								{{each ifo.coverImageList as image}}
+								<div class="img-dv">
+									<a href="{{image.ctiImageUrl}}" data-size="">
+										<img src="{{image.ctiImageUrl}}" onload="resize_img(this)" />
+									</a>
+								</div>
+								{{/each}}
+								<figcaption itemprop="caption description">{{ifo.haiContent}}</figcaption>
+							</figure>
+						</div>
+						<!--   <span>+10</span> -->
+					</div>
+				</a>
+				<p class="fo">
+					<span>{{ifo.ownName}}</span>
+					<span>{{ifo.haiReadCount}}阅读</span>
+					<span>{{ifo.commentCount}}评论</span>
+
+				</p>
+			</article>
+			{{/if}} {{/if}} {{/if}} {{/each}}
+			</script>
+		</div>
+		</div>
+		</div>
+		<script >
+				function back(){ 
+					var userId = sanmi.queryParam("myHistory"); 
+					sanmi.toPage("person-center.html?userId="+userId); 
+					} 
+			
+		</script>
+	</body>
+
+</html>

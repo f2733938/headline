@@ -1,0 +1,68 @@
+$(function() {
+	var userId = sanmi.queryParam("userId");
+	//获取个人信息详情
+	personInfoView();
+		function personInfoView() {
+		var param = {
+			url: '/user/detail',
+			data: {
+				'userId': userId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'infoDetailHander',
+		}
+		sanmi.query(param);
+	}
+});
+//处理返回值
+function infoDetailHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+		alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+	$("#head").attr("style","background-image: url("+json.info.uHeadImage+");");
+	$("#nickName").html(json.info.nickName);
+	$("#sex").html(json.info.sex);
+	$("#birth-date").val(json.info.birthday);
+	$("#telephone").html(json.info.phone);
+	//var html = template('typefloorList', json);
+	//console.info(html);
+	//$(".channel-list").html(html);
+	//document.getElementById('channel').innerHTML = html;
+}
+//点击用户头像跳转用户详情页
+function person_info(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-info.html?userId="+userId);
+}
+//查看用户历史记录
+function user_histroy(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("read-histroy.html?myHistory="+userId);
+}
+//查看用户收藏
+function user_collect(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-collect.html?myCollect="+userId);	
+}
+//查看用户关注
+function user_focus(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-focus.html?myFollow="+userId);	
+}
+//跳转回用户主页
+function back(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-center.html?userId="+userId);	
+}
+//退出登录,清空缓存,跳转主页
+function loginOut(){
+	sanmi.setCash("userInfo","");
+	sanmi.toPage("index.html?recommend=true);
+}
+
+

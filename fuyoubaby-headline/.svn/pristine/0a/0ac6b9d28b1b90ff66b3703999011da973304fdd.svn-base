@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+		<script>jQuery.noConflict()</script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/bangding.js"></script>
+	</head>
+	<body>
+		<div class="page" style="background:#fff">
+			<header class="bar bar-nav head-bg">	
+			    <h1 class="title">绑定手机号</h1>
+			</header>
+			<div class="content">
+				<article class="bd-list">
+					<span>手机号码</span>
+					<div class="phonenumber">
+						<input type="tel" name="phone" id="phone" placeholder="请输入手机号码" maxlength="11">
+					</div>
+				</article>
+				<article class="bd-list">
+					<span>动态码</span>
+					<div class="dogntaima">
+						<input type="number" name="dtm" id="dtm" placeholder="请输入动态码" onKeyDown="if(this.value.length==15) return false;">
+						<div>
+							<img id="dtmImage" src="">
+							<a href="javascript:;" id="invisibility" hidden>看不清？</a>
+						</div>
+					</div>
+				</article>
+				<article class="bd-list">
+					<span>验证码</span>
+					<div class="yanzhengma">
+						<input type="text" name="sms" id="sms" placeholder="请输入短信验证码" maxlength="6">
+						<div>
+						    <input type="button" value="获取验证码" onclick="settime(this)" >
+							<input type="hidden" id="verification"  value="true">
+						</div>
+					</div>
+				</article>
+				<article class="bd-list">
+					<span>设置密码 </span>
+					<div class="paswd">
+						<input type="password" placeholder="6-20位字母数字密码" name="password" id="password">
+					</div>
+				</article>
+				<a href="javascript:;" class="ok-btn">完成</a>
+			</div>
+		</div>
+		<script src="/resources/js/zepto.min.js"></script>
+		<script src="/resources/js/sm.min.js"></script>
+		<script>
+			var countdown=60;
+			var flag = true;
+        		function settime(obj){
+					var dtm = $("#dtm").val();
+					var phone = $("#phone").val();
+
+					if(checkPhone(phone) === false){
+						$.alert("手机号码有误,请重填");
+						return;
+					}
+					if(dtm === ""){
+						$.alert("请输入动态码");
+						return;
+					}
+                    if(dtm.length != 4 ){
+                        $.alert("动态码有误，请重填");
+                        return;
+                    }
+        			if(countdown==0){
+        				flag = true;
+        				obj.removeAttribute("disabled");    
+                        obj.value="获取验证码";
+                        countdown=60;
+                        return false;
+        			}else{
+        				if(flag){
+        				//调用短信发送接口
+        				var param = {
+						url: '/code/sms/send/temp',
+						data: {
+							'phone': phone,
+							'dtm': dtm,
+							'bz': 6,//代表绑定微信
+						},
+						method: 'post',
+						dataType: 'json',
+						callback: 'followHander',
+					}
+					sanmi.query(param);	
+        				}
+					//	debugger;
+                        var f = $("#verification").val();
+        				if (f != "false"){
+                            flag = false;
+                            obj.setAttribute("disabled", true);
+                            obj.value= countdown + "s后重发";
+                            countdown--;
+						}
+        			}
+                    var f = $("#verification").val();
+        			if(f != "false"){
+        			setTimeout(function() {
+				    settime(obj) }
+				    ,1000)
+                    }
+        		}
+        		function followHander(json){
+			     var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+                    $("#verification").val("false");
+                    $.alert(json.msg);
+					//sanmi.toPage("/index.html");
+
+                    return;
+				}
+				$.alert("发送短信成功");
+        	}
+		</script>
+	</body>
+</html>

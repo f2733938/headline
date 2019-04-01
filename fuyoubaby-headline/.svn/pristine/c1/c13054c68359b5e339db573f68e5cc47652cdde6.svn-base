@@ -1,0 +1,59 @@
+$(function() {
+	var recommend = sanmi.queryParam("recommend");
+	var secondLevelArticleTypeId = sanmi.queryParam("secondLevelArticleTypeId");
+	var userId = sanmi.queryParam("userId");
+	var keyword = sanmi.queryParam("keyword");
+	var myCollect = sanmi.queryParam("myCollect");
+	var myFollow = sanmi.queryParam("myFollow");
+	var myHistory = sanmi.queryParam("myHistory");
+	//妇幼头条文章列表
+	articleList();
+	function articleList() {
+		var param = {
+			url: '/headline/article/info/list',
+			data: {
+				'recommend': recommend,
+				'secondLevelArticleTypeId': secondLevelArticleTypeId,
+				'userId': userId,
+				'keyword': decodeURI(keyword),
+				'myCollect': myCollect,
+				'myFollow': myFollow,
+				'myHistory': myHistory,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'topicDetailHander',
+		}
+		sanmi.query(param);
+	}
+});
+//处理返回值
+function topicDetailHander(json) {
+	var status = json.status;
+	//console.info(status);
+	if(status == "0") {
+		alert(json.msg);
+		//sanmi.toPage("/index.html");
+		return;
+	}
+	//console.info(json);
+		var html = template('floorList', json);
+		console.info(json.info);
+		console.info(html);
+	$(".line-con").html(html);
+	//debugger;
+	var keyword = sanmi.queryParam("keyword");
+	if(keyword != null){
+		$("#serachTxt").val(decodeURI(keyword));
+	}
+	//document.getElementById('content').innerHTML = html;
+	
+	//var html = template('imageBox', json.info);
+	/*if((json.info.imageList.length-6)>0){
+		console.log("大于6")
+		$("#img-more-count").html(json.info.imageList.length-6);
+	}else{
+		$(".img-more").hide();
+	}*/
+	//$(".my-gallery").html(html);
+}

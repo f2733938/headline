@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/image-auto.js"></script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/search_result.js"></script>
+		<script type="text/javascript" src="/resources/js/template.js"></script>
+		<script>
+			$(function () {
+                console.info($(".new-item5 .l-first-tus figure").width($("html,body").width()-20));
+                $(".new-item5 .l-first-tus figure").height($(".new-item5 .l-first-tus figure").width() * 0.58);
+            })
+		</script>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="icon icon-left pull-left" onclick="window.history.back();"></a>
+				<h1 class="title">搜索</h1>
+			</header>
+			<div class="content" style="background:#fff">
+				<article class="search-b">
+					<img src="/resources/images/sousuo.png" onclick="search()">
+					<form action='' onsubmit="return false;">
+						<input type="search" placeholder="输入想搜索内容的关键词" id="serachTxt">
+					</form>
+					<a href="javascript:;" class="searchCancel">取消</a>
+				</article>
+				<div class="line-con" style="border-top:1px solid #f0f0f0" id="content">
+					<script id="floorList" type="text/html">
+						{{each info as ifo}}  {{if ifo.coverPositionFlag == "THREE_LIST"}} {{if ifo.haiArticleType == "IMAGE"}}
+						<article class="new-item4">
+							<a href="/view/detail.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+							</a>
+							<div class="more-tus">
+								<div class="l-first-tus my-gallery">
+									{{each ifo.coverImageList as image}}
+									<figure>
+										<div class="img-dv">
+											<a class="item-span" data-size="" href="detail.html?articleId={{ifo.haiId}}">
+												<img src="{{image.url}}" onload="resize_img(this)" >
+											</a>
+										</div>
+										<!--  <figcaption itemprop="caption description">{{image.ctiImageUrl}}</figcaption>-->
+									</figure>
+									{{/each}}
+								</div>
+								<span>+{{ifo.coverImageList.length}}</span>
+							</div>
+
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else}}
+						<article class="new-item">
+							<a href="/view/detail1.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+								<div class="l-first-tus">
+									{{each ifo.coverImageList as image}}
+									<figure style="background-image: url({{image.url}});"></figure>
+									{{/each}}
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{/if}} {{/if}}
+						<!--   小图靠右-->
+						{{if ifo.coverPositionFlag == "SMALL_RIGHT"}} {{if ifo.haiArticleType == "VIDEO"}}
+						<article class="new-item2">
+							<a href="/view/detail2.html?articleId={{ifo.haiId}}">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-s-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+										<span class="video-len">{{ifo.videoLengthStr}}</span></div>
+								</div>
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else if ifo.haiArticleType == "RICH_TEXT"}}
+						<article class="new-item2">
+							<a href="/view/detail1.html?articleId={{ifo.haiId}}">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-s-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+									</div>
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else }}
+						<article class="new-item2">
+							<a href="/view/detail.html?articleId={{ifo.haiId}}">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<div class="item-s-cover">
+										{{each ifo.coverImageList as image}}
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+									</div>
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{/if}} {{/if}}
+						<!--   大图居中-->
+						{{if ifo.coverPositionFlag == "BIG_CENTER"}} {{if ifo.haiArticleType == "VIDEO"}}
+						<article class="new-item3">
+							<a href="/view/detail2.html?articleId={{ifo.haiId}}">
+								<div class="item-d">
+									<h5 class="h">{{ifo.haiTitle}}</h5>
+									<!--   大图居中  可能为视频和图片-->
+									<div class="item-video">
+										{{each ifo.coverImageList as image}}
+										<!--<img src="{{image.url}}">-->
+										<figure style="background-image: url({{image.url}});" class="l-first-tus"></figure>
+										{{/each}}
+										<span class="video-len">{{ifo.videoLengthStr}}</span>
+									</div>
+
+								</div>
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else if ifo.haiArticleType == "IMAGE"}}
+						<article class="new-item5">
+							<a href="/view/detail.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+
+								<div class="more-tus">
+									<div class="l-first-tus my-gallery">
+										{{each ifo.coverImageList as image}}
+										<figure>
+
+											<div class="img-dv">
+												<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+												<img src="{{image.url}}" onload="resize_img(this)" />
+												<!--	</a>-->
+											</div>
+
+										</figure>
+										{{/each}}
+									</div>
+									<!--   <span>+10</span> -->
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{else}}
+						<article class="new-item5">
+							<a href="/view/detail1.html?articleId={{ifo.haiId}}">
+								<h5 class="h">{{ifo.haiTitle}}</h5>
+
+								<div class="more-tus">
+									<div class="l-first-tus my-gallery">
+										{{each ifo.coverImageList as image}}
+										<figure>
+
+											<div class="img-dv">
+												<!--<a href="{{image.ctiImageUrl}}" data-size="">-->
+												<img src="{{image.url}}"  onload="resize_img(this)"/>
+												<!--	</a>-->
+											</div>
+
+										</figure>
+										{{/each}}
+									</div>
+									<!--   <span>+10</span> -->
+								</div>
+							</a>
+							<p class="fo">
+								<span>{{ifo.ownName}}</span>
+								<span name="count">{{ifo.haiReadCount}}阅读</span>
+								<span>{{ifo.commentCount}}评论</span>
+
+							</p>
+						</article>
+						{{/if}} {{/if}}  {{/each}}
+					</script>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*搜索*/
+				$("#serachTxt").bind("search", function() {
+					//事件
+                    var keyword = $("#serachTxt").val();
+                    var userId = sanmi.queryParam("userId");
+                    window.location.href = "search-result.html?keyword=" + encodeURI(encodeURI(keyword))+"&userId="+userId;
+				})
+				/*搜索取消*/
+				$(".searchCancel").click(function() {
+					$("#serachTxt").val("");
+				})
+
+
+                var searchArr;
+                //定义一个search的，判断浏览器有无数据存储（搜索历史）
+                if(localStorage.search){
+                    //如果有，转换成 数组的形式存放到searchArr的数组里（localStorage以字符串的形式存储，所以要把它转换成数组的形式）
+                    searchArr= localStorage.search.split(",")
+                }else{
+                    //如果没有，则定义searchArr为一个空的数组
+                    searchArr = [];
+                }
+                var keyword = $("#serachTxt").val()
+                //点击搜索按钮时，去重
+                KillRepeat(keyword);
+                //去重后把数组存储到浏览器localStorage
+                localStorage.search = searchArr;
+
+
+                //去重
+                function KillRepeat(val){
+                    var kill = 0;
+                    for (var i=0;i<searchArr.length;i++){
+                        if(val===searchArr[i]){
+                            kill ++;
+                        }
+                    }
+                    if(kill<1){
+                        searchArr.push(val);
+                    }
+                }
+			})
+
+			function search() {
+				//var userId = sanmi.queryParam("userId");
+				//var cityCode = sanmi.queryParam("cityCode");
+				var keyword = $("#serachTxt").val()
+				window.location.href = "search-result.html?keyword=" + encodeURI(encodeURI(keyword));
+			}
+
+		</script>
+	</body>
+
+</html>

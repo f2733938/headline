@@ -1,0 +1,74 @@
+$(function() {
+	var userId = sanmi.queryParam("userId");
+	//获取个人信息详情
+    $.ajax({
+        type : "POST", //提交方式
+        url : "/user/login/view",//路径
+        data : {
+            'userid' : userId,
+        },//数据，这里使用的是Json格式进行传输
+        success : function(result) {//返回数据根据结果进行相应的处理
+            console.log(result);
+            if(result.status == "0") {
+                alert(result.msg);
+                //sanmi.toPage("/index.html");
+                return;
+            }
+            if(result.info.uHeadImage != ""){
+                $("#head").attr("style","background-image: url("+result.info.uHeadImage+");");
+            }
+            $("#nickName").html(result.info.nickName);
+            if (result.info.sex == 1){
+                $("#sex").html("男");
+                $("#man").attr("src","/resources/images/xuanzhong.png");
+                $("#woman").attr("src","/resources/images/weixuanzhong.png");
+			}else{
+                $("#sex").html("女");
+                $("#woman").attr("src","/resources/images/xuanzhong.png");
+                $("#man").attr("src","/resources/images/weixuanzhong.png");
+			}
+            $("#birth-date").val(result.info.birthday.substring(0,10));
+            $("#telephone").html(result.info.phone);
+        }
+    });
+});
+//点击用户头像跳转用户详情页
+function person_info(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-info.html?userId="+userId);
+}
+//查看用户历史记录
+function user_histroy(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("read-histroy.html?myHistory="+userId+"&userId="+userId);
+}
+//查看用户收藏
+function user_collect(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-collect.html?myCollect="+userId+"&userId="+userId);
+}
+//查看用户关注
+function user_focus(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-focus.html?myFollow="+userId+"&userId="+userId);
+}
+//跳转回用户主页
+function back(){
+	var userId = sanmi.queryParam("userId");
+	sanmi.toPage("person-center.html?userId="+userId);
+}
+//退出登录,清空缓存,跳转主页
+function loginOut(){
+    $.ajax({
+        type : "POST", //提交方式
+        url : "/user/login/logout",//路径
+        success : function() {//
+            //debugger;
+            sanmi.toPage("/view/index.html?recommend=true&userId=null");
+        }
+
+    });
+
+}
+
+

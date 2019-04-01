@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/weui.min.css"/>
+		<link rel="stylesheet" href="/resources/css/jquery-weui.min.css"/>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/css.css" />
+        <script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+		<script type="text/javascript" src="/resources/js/jquery-weui.min.js"></script>
+		<script>jQuery.noConflict()</script>
+        <script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+			<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+	<script type="text/javascript" src="/resources/listjs/channel.js"></script>
+	   <script type="text/javascript" src="/resources/js/template.js"></script>
+	</head>
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a class="icon icon-left pull-left" href="index.html" onclick="window.history.back()"></a>
+			    <h1 class="title">频道列表</h1>
+			</header>
+			<div class="content" style="background: #fff;">
+				<article class="channel-art">
+					<h5>我的频道<!--<small>拖动板块改变顺序</small>--></h5>
+					<!--<a href="javascript:;">完成</a>-->
+				</article>
+				<div class="channel-list" id="channel">
+				<script id="typefloorList" type="text/html">
+				{{each info as ifo i}}
+			        <a href="javascript:;" ondrop="drop(event,this)" ondragover="allowDrop(event)" draggable="true" ondragstart="drag(event, this)" mark="{{i + 1}}" id="{{ifo.htId}}">{{ifo.htName}}</a>
+					 {{/each}}
+				</script>
+				 
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function(){
+				$(".channel-list a").each(function(i,e){
+					if(i%3==2){
+						$(e).css("margin-right",0);
+					}
+					var a =  $(e).html();
+					if(a.length > 5){
+                        $(e).html(a.substring(0,5)+"..");
+					}
+              //    alert(a.length);
+				})
+			})
+		</script>
+		<script type="text/javascript">  
+		function allowDrop(ev)  
+		{  
+		ev.preventDefault();  
+		}  
+		  
+		var srcdiv = null;  
+		function drag(ev,divdom)  
+		{  
+		srcdiv=divdom;  
+		ev.dataTransfer.setData("text/html",divdom.innerHTML);  
+		//ev.dataTransfer.setData("dd",divdom.target.id);  
+		console.info(divdom.target.mark);
+		}  
+		  
+		function drop(ev,divdom)  
+		{  
+		ev.preventDefault();  
+		if(srcdiv != divdom){  
+		srcdiv.innerHTML = divdom.innerHTML;  
+		  var data=ev.dataTransfer.getData("dd");  
+		divdom.innerHTML=ev.dataTransfer.getData("text/html");  
+		//ev.target.id=data; 
+		}  
+		}  
+		</script> 
+	</body>
+</html>

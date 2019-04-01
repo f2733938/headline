@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="css/sm.min.css" />
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/css.css" />
+        <script type="text/javascript" src="js/jquery1.11.3.min.js" ></script>
+        <script type="text/javascript" src="js/zepto.min.js" ></script>
+        <script type="text/javascript" src="js/sm.min.js" ></script>
+        			<script type="text/javascript" src="base/httpClient.js"></script>
+			<script type="text/javascript" src="listjs/detail_comment.js"></script>
+			 <script type="text/javascript" src="js/template.js"></script>
+	</head>
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a class="icon icon-left pull-left" onclick="back()"></a>
+			    <h1 class="title">评论列表</h1>
+			</header>
+			<div class="content" style="background: #fff;">
+				<div class="comment-sec" d="comment_sec">
+					<script id="typefloorList" type="text/html">
+		    		<section>
+		    				{{each info as ifo}}
+			    			<article class="comment-item">
+			    				<span style="background-image:url({{ifo.userHeadImage}});" class="item-head"></span>
+			    			    <div>
+			    			    	<p class="item-p0 clearfix">
+									<!--<a href="javascript:;" hidden="hidden" id="hacArticleId">{{ifo.hacArticleId}}</a>-->
+			    			    	   <span style="color:#31567f;">{{ifo.userName}}</span>
+									   {{if ifo.hasLike == "Y"}}
+			    			    	   <span class="clickPraise"><img src="images/yizan.png" id="{{ifo.hacId}}"><i style="color:#f84a4b">{{ifo.hacLikeCount}}</i></span>
+									   {{else}}
+									    <span class="clickPraise"><img src="images/zan.png" id="{{ifo.hacId}}"><i style="color:#90a2af">{{ifo.hacLikeCount}}</i></span>
+										{{/if}}
+			    			    	</p>
+			    			    	<p class="item-p1">{{ifo.hacContent}}</p>
+			    			    	<time>{{ifo.hacCreateTime}}</time>
+			    			    </div>
+			    			</article>
+							{{/each}}
+		    		</section>
+		    		</script>
+		    	</div>
+		    	<footer class="detail-footer">
+			    	<div class="pull-left" style="width: 100%;">
+			    		<img src="images/pinglun-b.png" id="pinglun">
+			    		<input type="text" placeholder="写评论..." id="comment">
+			    		<input type="hidden"  id="userId">
+			    		<input type="hidden"  id="articleId">
+			    	</div>
+			      
+			    </footer>
+			</div>
+		</div>
+		<script>
+			$(function(){
+				var userId = $("#userId").val();
+				var articleId = $("#articleId").val();
+				$.each($(".comment-item"), function(i,e) {
+					$(e).find(".clickPraise").click(function(){
+						if($(this).find("img").attr("src")=="images/zan.png"){
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/yizan.png");
+							$(this).find("i").css("color","#f84a4b");
+							$(this).find("i").html(num+1);
+						}/*else{
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/zan.png");
+							$(this).find("i").css("color","#90a2af");
+							$(this).find("i").html(num-1);
+						}*/
+						var commentId = $(this).find("img").attr("id");
+						var param = {
+			url: '/headline/article/comment/like',
+			data: {
+				'commentId': commentId,
+				'userId': userId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'collectionHander',
+					}
+			sanmi.query(param);
+					})
+					//评论逻辑实现
+				$("#pinglun").click(function(){
+				var comment =  $("#comment").val();
+				var param = {
+			url: '/headline/article/comment/create',
+			data: {
+				'content': comment,
+				'userId': userId,
+				'articleId': articleId,
+			},
+			method: 'post',
+			dataType: 'json',
+			callback: 'commentHander',
+					}
+			sanmi.query(param);
+				})
+					$(e).find(".clickDel").click(function(){
+						$(e).remove();
+					})
+				});
+			})
+			function back(){
+				//debugger;
+				/*var userId = $("#userId").val();
+				var articleId = $("#articleId").val();
+				window.location.href="detail.html??articleId="+articleId+"&userId="+userId;*/
+				window.history.back();  
+			}
+			function commentHander(json) {
+				var articleId = sanmi.queryParam("articleId");
+				var userId = sanmi.queryParam("userId");				
+				var status = json.status;
+				//console.info(status);
+				if(status == "0") {
+					alert(json.msg);
+					//sanmi.toPage("/index.html");
+					return;
+				}
+				alert("评论成功!");
+				$("#comment").val("");
+				window.location.href="detail2.html?userId="+userId+"&articleId="+articleId;
+			}			
+		</script>
+	</body>
+</html>

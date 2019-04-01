@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/css.css" />
+        <script type="text/javascript" src="/resources/js/jquery1.11.3.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/zepto.min.js" ></script>
+        <script type="text/javascript" src="/resources/js/sm.min.js" ></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/listjs/login.js"></script>
+	</head>
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+			    <h1 class="title">登录</h1>
+			    <a href="register.html" class="pull-right regist-link">快速注册</a>
+			</header>
+			<div class="content" style="background:#fff;">
+				<div class="login-info">
+					<img src="/resources/images/logo.png" class="logo-icon">
+					<div>
+						<article class="item">
+							<img src="/resources/images/shouji.png" class="item-icon">
+							<input type="tel" name="phone" id="phone" placeholder="请输入您的手机号码" maxlength="11">
+						</article>
+						<article class="item">
+							<img src="/resources/images/mima.png"  class="item-icon">
+							<input type="password" id="password" name="password" placeholder="请输入您的密码">
+						</article>
+						<article class="but">
+							<a href="javascript:;" id="login">登录</a>
+							<a href="/view/forget-paswd.html">忘记密码</a>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

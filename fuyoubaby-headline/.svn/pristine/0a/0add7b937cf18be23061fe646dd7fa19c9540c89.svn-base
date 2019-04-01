@@ -1,0 +1,46 @@
+package com.sanmi.microservice.headline.common.interceptors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 微信第三方自动登录拦截器
+ *
+ * @author：于起宇 <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018/3/27
+ * Time：上午9:33
+ * 简书：http://www.jianshu.com/u/092df3f77bca
+ * ================================
+ */
+@Component
+public class WeiXinAutoLoginInterceptor implements HandlerInterceptor {
+    /**
+     * logger instance
+     */
+    static Logger logger = LoggerFactory.getLogger(WeiXinAutoLoginInterceptor.class);
+
+    /**
+     * 处理拦截器请求
+     *
+     * @param request  请求对象
+     * @param response 相应对象
+     * @param handler  控制处理器
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 获取请求地址
+        String uri = request.getRequestURI();
+        logger.info("拦截地址：{}",uri);
+
+        return true;
+    }
+}

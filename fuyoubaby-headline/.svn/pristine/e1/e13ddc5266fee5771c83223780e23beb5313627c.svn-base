@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="css/sm.min.css" />
+		<link rel="stylesheet" href="css/reset.css" />
+        <link rel="stylesheet" href="css/css.css" />
+         <link rel="stylesheet" href="css/swiper-4.1.6.min.css" />
+        <script type="text/javascript" src="js/jquery1.11.3.min.js" ></script>
+        <script type="text/javascript" src="js/zepto.min.js" ></script>
+        <script type="text/javascript" src="js/sm.min.js" ></script>
+        <script type="text/javascript" src="js/swiper-4.1.6.min.js" ></script>
+	</head>
+	<body>
+		<div class="page">
+			<div class="content" style="background:#fff">
+				<h5 class="detail-title">线下培训: 山东省月嫂育儿嫂医学护理技能培训聊城站第一期隆重举行</h5>
+			    <small class="headings">2018年1月13日，由“妇幼宝贝”平台携手聊城市东昌府区妇幼保健院举办！</small>
+			    <div>
+			    	<article class="detail-top clearfix">
+			    		<div class="pull-left">
+			    			<span style="background-image: url(images/list1.png);" class="detail-head"></span>
+			    			<div>
+			    				<p>泰安市妇幼保健院</p>
+			    				<time>02-14 12:00</time>
+			    			</div>
+			    		</div>
+			    		<div class="pull-right">
+			    			<a href="javascript:;" class="guanzhu">关注</a>
+			    		</div>
+			    	</article>
+			    	<div class="detail-con">
+			    		<p>2018年1月13日，由“妇幼宝贝”平台携手聊城市东昌府区妇幼保健院举办的山东省月嫂育儿嫂医学护理技能培训（聊城站第一期）暨山东省月嫂育儿嫂医学护理技能培训见习医院揭牌仪式在聊城市东昌府区妇幼保健院隆重举行。</p>
+			    		<img src="images/list1.png">
+			    		<div class="detail-video">
+							<video width="100%" height="240" controls>
+							    <source src="images/shipin.mp4" type="video/mp4">
+							</video>
+						</div>
+			    	</div>
+			    	<div class="comment-sec">
+			    		<header>用户评论(<i>500</i>)</header>
+			    		<section>
+			    			<article class="comment-item">
+			    				<span style="background-image:url(images/aaa.jpg);" class="item-head"></span>
+			    			    <div>
+			    			    	<p class="item-p0 clearfix">
+			    			    	   <span style="color:#31567f;">无处可躲</span>
+			    			    	   <span class="clickPraise"><img src="images/zan.png"><i style="color:#90a2af">256</i></span>
+			    			    	</p>
+			    			    	<p class="item-p1">如果你无法简洁的表达你的想法，那只说明你还不够了解它。</p>
+			    			    	<time>2018-01-21 12:00</time>
+			    			    </div>
+			    			</article>
+			    			<article class="comment-item">
+			    				<span style="background-image:url(images/aaa.jpg);" class="item-head"></span>
+			    			    <div>
+			    			    	<p class="item-p0 clearfix">
+			    			    	   <span style="color:#31567f;">无处可躲</span>
+			    			    	   <span class="clickPraise"><img src="images/zan.png"><i style="color:#90a2af">256</i></span>
+			    			    	</p>
+			    			    	<p class="item-p1">如果你无法简洁的表达你的想法，那只说明你还不够了解它。</p>
+			    			    	<time>2018-01-21 12:00</time>
+			    			    </div>
+			    			</article>
+			    		</section>
+			    	</div>
+			    </div>
+			    <footer class="detail-footer">
+			    	<div class="pull-left">
+			    		<img src="images/pinglun-b.png">
+			    		<input type="text" placeholder="写评论...">
+			    	</div>
+			        <span class="pull-right">
+			        	<img src="images/shoucang1.png" id="clickCollect">
+			        </span>
+			    </footer>
+			</div>
+			<!--图片预览-->
+		    <div class="picturePreview">
+		    	<div class="swiper-container">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide">
+				        	<img src="images/list1.png">
+				        </div>
+				    </div>
+				   
+				</div>
+		    </div>
+		</div>
+		<script>
+			$(function(){
+				$(".guanzhu").click(function(){
+		        	if($(this).hasClass("yiguanzhu")){
+		        		$(this).removeClass("yiguanzhu");
+		        		$(this).html("关注");
+		        	}else{
+		        		$(this).addClass("yiguanzhu");
+		        		$(this).html("已关注");
+		        	}
+		        })
+				$.each($(".comment-item"), function(i,e) {
+					$(e).find(".clickPraise").click(function(){
+						if($(this).find("img").attr("src")=="images/zan.png"){
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/yizan.png");
+							$(this).find("i").css("color","#f84a4b");
+							$(this).find("i").html(num+1);
+						}else{
+							var num=parseInt($(this).find("i").html());
+							$(this).find("img").attr("src","images/zan.png");
+							$(this).find("i").css("color","#90a2af");
+							$(this).find("i").html(num-1);
+						}
+					})
+				});
+				/*收藏*/
+				$("#clickCollect").click(function(){
+					if($(this).attr("src")=="images/shoucang1.png"){
+						$(this).attr("src","images/yishoucang.png");
+					}else{
+						$(this).attr("src","images/shoucang1.png");
+					}
+				})
+				/*图片预览*/
+				$(".detail-con img").click(function(){
+					if($(".detail-con img").length==1){
+						var flag=false;
+					}else{
+						var flag=true;
+					}
+					$(".detail-con img").addClass("detail-img");
+					var img_index=$(".detail-con .detail-img").index($(this));
+					console.info(img_index);
+					$(".picturePreview").show();
+					var mySwiper = new Swiper ('.swiper-container', {
+					    direction:'horizontal',
+					    loop:flag,
+					    slidesPerView:'auto',
+					    initialSlide:img_index,
+					    observer:true,//修改swiper自己或子元素时，自动初始化swiper
+	                    observeParents:true,//修改swiper的父元素时，自动初始化swiper
+					})     
+				})
+				
+				$(".picturePreview").click(function(){
+					img_index=$(this).hide();
+				})
+			})
+		</script>
+	</body>
+</html>

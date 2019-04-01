@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="expires" content="60">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title></title>
+		<link rel="stylesheet" href="/resources/css/sm.min.css" />
+		<link rel="stylesheet" href="/resources/css/reset.css" />
+		<link rel="stylesheet" href="/resources/css/css.css" />
+		<script type="text/javascript" src="/resources/js/jquery1.11.3.min.js"></script>
+		<script type="text/javascript" src="/resources/js/zepto.min.js"></script>
+		<script type="text/javascript" src="/resources/base/httpClient.js"></script>
+		<script type="text/javascript" src="/resources/js/sm.min.js"></script>
+		<!--弹窗实现-->
+		<link rel="stylesheet" href="/resources/css/weui.min.css"/>
+		<link rel="stylesheet" href="/resources/css/jquery-weui.min.css"/>
+		<script type="text/javascript" src="/resources/js/jquery-weui.min.js"></script>
+		<style>
+			input[type=search]::-webkit-search-cancel-button{
+				-webkit-appearance: none;
+			}
+		</style>
+		<style>
+			.weui-dialog {
+				background-color: #e5e5e5;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="page">
+			<header class="bar bar-nav head-bg">
+				<a href="javascript:;" class="icon icon-left pull-left" onclick="window.history.back();"></a>
+				<h1 class="title">搜索</h1>
+			</header>
+			<div class="content" style="background:#fff">
+				<article class="search-b">
+					<img src="/resources/images/sousuo.png">
+					<form action='' onsubmit="return false;">
+						<input type="search" placeholder="输入想搜索内容的关键词" id="serachTxt" maxlength="30">
+						<img src="/resources/images/searchCancel.png" class="searchCancel">
+					</form>
+					<a href="javascript:;" class="searchBtn"  onclick="searchResult()">搜索</a>
+				</article>
+				<p class="search-title">历史记录<span><img src="/resources/images/del.png"></span></p>
+				<ul class="search-list">
+					<li>
+						<a href="javascript:;">山东省妇幼保健院</a>
+					</li>
+					<li>
+						<a href="javascript:;">宝宝摔倒应该怎么办</a>
+					</li>
+					<li>
+						<a href="javascript:;">妇幼宝贝合作</a>
+					</li>
+					<li>
+						<a href="javascript:;">泰安市妇幼保健院</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*清楚搜索历史记录*/
+				$(".search-title span").click(function() {
+                    $.confirm("是否要清空搜索历史记录", function() {
+                        //点击确认后的回调函数
+                        $(".search-list").find("li").remove();
+                        //$(".search-title").hide();
+                        localStorage.removeItem('search');
+                    }, function() {
+                        //点击取消后的回调函数
+                        $.closeModal(); //关闭对话框
+                    });
+/*				    $.alert("是否要清空搜索历史记录",function(){
+                        $(".search-list").find("li").remove();
+                        //$(".search-title").hide();
+                        localStorage.removeItem('search');
+					})*/
+
+                })
+
+				/*搜索*/
+				$("#serachTxt").bind("search", function() {
+                    var keyword = $("#serachTxt").val();
+                    var userId = sanmi.queryParam("userId");
+                    var platform= sanmi.queryParam("platform");
+                    window.location.href = "search-result.html?keyword=" + encodeURI(encodeURI(keyword))+"&userId="+userId+"&platform="+platform;
+				})
+				/*搜索取消*/
+                $("#serachTxt").focus(function () {
+                    $(".searchCancel").show();
+                })/*.blur(function () {
+                    $(".searchCancel").hide();
+                })*/
+				$(".searchCancel").click(function() {
+					$("#serachTxt").val("");
+				})
+                var searchArr;
+                //定义一个search的，判断浏览器有无数据存储（搜索历史）
+                if(localStorage.search){
+                    //如果有，转换成 数组的形式存放到searchArr的数组里（localStorage以字符串的形式存储，所以要把它转换成数组的形式）
+                    searchArr= localStorage.search.split(",")
+                }else{
+                    //如果没有，则定义searchArr为一个空的数组
+                    searchArr = [];
+                }
+                //把存储的数据显示出来作为搜索历史
+                MapSearchArr();
+                function MapSearchArr(){
+                   // debugger;
+                    var tmpHtml = "";
+                    var userId = sanmi.queryParam("userId");
+                    var platform= sanmi.queryParam("platform");
+                    for (var i=0;i<searchArr.length;i++){
+
+                        tmpHtml += "<li><a href='/view/search-result.html?keyword="+encodeURI(encodeURI(searchArr[i]))+"&userId="+userId+"&platform="+platform+"'>"+searchArr[i]+"</a> </li>"
+                    }
+                    $(".search-list").html(tmpHtml);
+                }
+			})
+
+			function searchResult() {
+
+				var userId = sanmi.queryParam("userId");
+				var cityCode = sanmi.queryParam("cityCode");
+                //第三方访问的链接
+                var platform= sanmi.queryParam("platform");
+				var keyword = $("#serachTxt").val()
+				window.location.href = "/view/search-result.html?keyword=" + encodeURI(encodeURI(keyword)+"&platform="+platform);
+			}
+
+		</script>
+	</body>
+
+</html>
